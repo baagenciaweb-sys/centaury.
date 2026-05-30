@@ -288,7 +288,21 @@ export default function Products() {
                     )}
                   </label>
                 </div>
-              </div>
+              </div><div className="mt-3">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    O pegá una URL de imagen
+  </label>
+  <input
+    type="text"
+    placeholder="https://ejemplo.com/imagen.jpg"
+    value={formData.imageUrl}
+    onChange={(e) => {
+      setFormData({ ...formData, imageUrl: e.target.value });
+      setImageFile(null);
+    }}
+    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-800 focus:border-transparent"
+  />
+</div>
 
               <div className="flex gap-3 pt-4">
                 <button
