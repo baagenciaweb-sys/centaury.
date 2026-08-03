@@ -3,7 +3,7 @@ import { ShoppingBag, MessageCircle, MapPin } from 'lucide-react';
 
 export default function Footer() {
   const storeName = import.meta.env.VITE_STORE_NAME || 'Mi Tienda';
-  const storeAddress = import.meta.env.VITE_STORE_ADDRESS || 'Dirección de la Tienda';
+  const storeAddress = import.meta.env.VITE_STORE_ADDRESS || 'Direccion de la Tienda';
   const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER || '1234567890';
 
   return (
@@ -16,7 +16,7 @@ export default function Footer() {
               <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center">
                 <ShoppingBag className="w-5 h-5 text-slate-900" />
               </div>
-              <span className="font-bold text-xl">{storeName}</span>
+              <span className="font-bold text-xl tracking-[0.16em]" style={{ fontFamily: 'Manrope, sans-serif' }}>{storeName}</span>
             </div>
             <p className="text-gray-400">
               Tu tienda de confianza con los mejores productos.
@@ -25,13 +25,13 @@ export default function Footer() {
 
           {/* Links */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">Navegación</h3>
+            <h3 className="font-semibold text-lg mb-4 tracking-[0.12em]" style={{ fontFamily: 'Manrope, sans-serif' }}>Navegacion</h3>
             <nav className="space-y-3">
               <Link to="/" className="block text-gray-400 hover:text-white transition-colors">
                 Inicio
               </Link>
               <Link to="/catalog" className="block text-gray-400 hover:text-white transition-colors">
-                Catálogo
+                Catalogo
               </Link>
               <Link to="/contact" className="block text-gray-400 hover:text-white transition-colors">
                 Contacto
@@ -44,7 +44,7 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">Contacto</h3>
+            <h3 className="font-semibold text-lg mb-4 tracking-[0.12em]" style={{ fontFamily: 'Manrope, sans-serif' }}>Contacto</h3>
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-gray-400">
                 <MapPin className="w-5 h-5 flex-shrink-0" />

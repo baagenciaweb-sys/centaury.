@@ -41,11 +41,11 @@ export default function Categories() {
   const handleDelete = async (category: Category) => {
     const hasProducts = products.some(p => p.categoryId === category.id);
     if (hasProducts) {
-      alert('No puedes eliminar esta categoría porque tiene productos asociados');
+      alert('No puedes eliminar esta categoria porque tiene productos asociados');
       return;
     }
     
-    if (confirm('¿Estás seguro de eliminar esta categoría?')) {
+    if (confirm('Estas seguro de eliminar esta categoria?')) {
       await remove(category.id);
     }
   };
@@ -70,14 +70,14 @@ export default function Categories() {
                 Dashboard
               </Link>
               <span className="text-gray-400">/</span>
-              <h1 className="text-xl font-bold text-gray-900">Categorías</h1>
+              <h1 className="text-xl font-bold text-gray-900">Categorias</h1>
             </div>
             <button
               onClick={() => setShowForm(true)}
               className="flex items-center gap-2 bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-lg font-medium transition-colors"
             >
               <Plus className="w-5 h-5" />
-              Nueva Categoría
+              Nueva Categoria
             </button>
           </div>
         </div>
@@ -91,12 +91,12 @@ export default function Categories() {
         ) : categories.length === 0 ? (
           <div className="text-center py-16 bg-white rounded-xl shadow-sm">
             <FolderPlus className="w-20 h-20 mx-auto text-gray-300 mb-4" />
-            <p className="text-gray-500 text-lg mb-4">No hay categorías</p>
+            <p className="text-gray-500 text-lg mb-4">No hay categorias</p>
             <button
               onClick={() => setShowForm(true)}
               className="text-slate-700 hover:text-slate-900 font-medium"
             >
-              Agregar la primera categoría
+              Agregar la primera categoria
             </button>
           </div>
         ) : (
@@ -152,7 +152,7 @@ export default function Categories() {
           <div className="bg-white rounded-2xl max-w-md w-full">
             <div className="flex items-center justify-between p-6 border-b">
               <h2 className="text-xl font-bold text-gray-900">
-                {editingCategory ? 'Editar Categoría' : 'Nueva Categoría'}
+                {editingCategory ? 'Editar Categoria' : 'Nueva Categoria'}
               </h2>
               <button onClick={resetForm} className="p-2 hover:bg-gray-100 rounded-lg">
                 <X className="w-5 h-5" />
@@ -162,7 +162,7 @@ export default function Categories() {
             <form onSubmit={handleSubmit} className="p-6 space-y-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Nombre de la categoría *
+                  Nombre de la categoria *
                 </label>
                 <input
                   type="text"
@@ -170,20 +170,20 @@ export default function Categories() {
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-800 focus:border-transparent"
-                  placeholder="Ej: Ropa, Electrónica, Hogar..."
+                  placeholder="Ej: Ropa, Electronica, Hogar..."
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Descripción
+                  Descripcion
                 </label>
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   rows={3}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-800 focus:border-transparent"
-                  placeholder="Descripción opcional de la categoría..."
+                  placeholder="Descripcion opcional de la categoria..."
                 />
               </div>
 

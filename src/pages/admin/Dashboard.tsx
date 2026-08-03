@@ -30,7 +30,7 @@ export default function Dashboard() {
               </div>
               <div>
                 <h1 className="font-bold text-gray-900">{storeName}</h1>
-                <p className="text-xs text-gray-500">Panel de Administración</p>
+                <p className="text-xs text-gray-500">Panel de Administracion</p>
               </div>
             </div>
             
@@ -62,7 +62,7 @@ export default function Dashboard() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
           <StatCard title="Productos" value={products.length} icon={<Package className="w-6 h-6" />} />
-          <StatCard title="Categorías" value={categories.length} icon={<FolderPlus className="w-6 h-6" />} />
+          <StatCard title="Categorias" value={categories.length} icon={<FolderPlus className="w-6 h-6" />} />
           <StatCard 
             title="Valor Total" 
             value={`$${products.reduce((sum, p) => sum + p.price, 0).toFixed(2)}`} 
@@ -79,8 +79,8 @@ export default function Dashboard() {
             count={products.length}
           />
           <ActionCard
-            title="Gestionar Categorías"
-            description="Organiza tus productos en categorías"
+            title="Gestionar Categorias"
+            description="Organiza tus productos en categorias"
             icon={<FolderPlus className="w-8 h-8" />}
             link="/admin/categories"
             count={categories.length}

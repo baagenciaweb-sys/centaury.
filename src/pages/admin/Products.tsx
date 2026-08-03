@@ -59,7 +59,7 @@ export default function Products() {
   };
 
   const handleDelete = async (product: Product) => {
-    if (confirm('¿Estás seguro de eliminar este producto?')) {
+    if (confirm('Estas seguro de eliminar este producto?')) {
       await remove(product.id);
     }
   };
@@ -117,7 +117,7 @@ export default function Products() {
                 <thead className="bg-gray-50 border-b">
                   <tr>
                     <th className="text-left py-4 px-6 font-semibold text-gray-900">Producto</th>
-                    <th className="text-left py-4 px-6 font-semibold text-gray-900">Categoría</th>
+                    <th className="text-left py-4 px-6 font-semibold text-gray-900">Categoria</th>
                     <th className="text-left py-4 px-6 font-semibold text-gray-900">Precio</th>
                     <th className="text-right py-4 px-6 font-semibold text-gray-900">Acciones</th>
                   </tr>
@@ -146,7 +146,7 @@ export default function Products() {
                         </td>
                         <td className="py-4 px-6">
                           <span className="inline-block bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm font-medium">
-                            {category?.name || 'Sin categoría'}
+                            {category?.name || 'Sin categoria'}
                           </span>
                         </td>
                         <td className="py-4 px-6 font-semibold text-gray-900">
@@ -207,7 +207,7 @@ export default function Products() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Descripción *
+                  Descripcion *
                 </label>
                 <textarea
                   value={formData.description}
@@ -235,7 +235,7 @@ export default function Products() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Categoría *
+                    Categoria *
                   </label>
                   <select
                     value={formData.categoryId}
@@ -290,7 +290,7 @@ export default function Products() {
                 </div>
               </div><div className="mt-3">
   <label className="block text-sm font-medium text-gray-700 mb-2">
-    O pegá una URL de imagen
+    O pega una URL de imagen
   </label>
   <input
     type="text"

@@ -8,14 +8,14 @@ export default function Cart() {
 
   if (items.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-        <div className="text-center">
-          <ShoppingBag className="w-24 h-24 mx-auto text-gray-300 mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Tu carrito está vacío</h2>
-          <p className="text-gray-500 mb-6">Agrega productos para comenzar</p>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12">
+        <div className="w-full max-w-3xl rounded-[32px] border border-slate-200 bg-white/90 px-8 py-16 text-center shadow-[0_20px_60px_rgba(0,0,0,0.08)] backdrop-blur-sm sm:px-12 lg:px-16 lg:py-24">
+          <ShoppingBag className="w-32 h-32 mx-auto text-gray-300 mb-8" />
+          <h2 className="text-5xl sm:text-6xl font-bold text-gray-900 mb-4">Tu carrito esta vacio</h2>
+          <p className="text-2xl sm:text-3xl text-gray-500 mb-10 leading-relaxed">Agrega productos para comenzar</p>
           <Link
             to="/catalog"
-            className="inline-flex items-center px-6 py-3 bg-slate-800 hover:bg-slate-900 text-white font-semibold rounded-lg transition-colors"
+            className="inline-flex items-center px-8 py-4 bg-slate-800 hover:bg-slate-900 text-white text-xl font-semibold rounded-2xl transition-colors"
           >
             Ver productos
           </Link>
@@ -25,7 +25,7 @@ export default function Cart() {
   }
 
   const whatsappMessage = encodeURIComponent(
-    `Hola! Me gustaría hacer el siguiente pedido:\n\n${items
+    `Hola! Me gustaria hacer el siguiente pedido:\n\n${items
       .map(item => `- ${item.product.name} x${item.quantity} = $${(item.product.price * item.quantity).toFixed(2)}`)
       .join('\n')}\n\nTotal: $${total.toFixed(2)}`
   );
@@ -67,7 +67,7 @@ export default function Cart() {
               <span>${total.toFixed(2)}</span>
             </div>
             <div className="flex justify-between text-gray-600">
-              <span>Envío</span>
+              <span>Envio</span>
               <span className="text-green-600">A calcular</span>
             </div>
             <div className="border-t pt-3 mt-3">

@@ -35,7 +35,7 @@ export default function Catalog() {
         
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            {selectedCategory ? selectedCategory.name : 'Catálogo'}
+            {selectedCategory ? selectedCategory.name : 'Catalogo'}
           </h1>
           {selectedCategory?.description && (
             <p className="text-gray-600">{selectedCategory.description}</p>
@@ -182,7 +182,7 @@ function ProductDetail({ product, categories }: { product: Product; categories: 
           className="inline-flex items-center text-slate-700 hover:text-slate-900 font-medium mb-6"
         >
           <Minus className="w-4 h-4 mr-1 rotate-90" />
-          Volver al catálogo
+          Volver al catalogo
         </Link>
 
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden">

@@ -26,9 +26,9 @@ export default function Login() {
       } else if (err.code === 'auth/user-not-found') {
         setError('Usuario no encontrado');
       } else if (err.code === 'auth/wrong-password') {
-        setError('Contraseña incorrecta');
+        setError('Contrasena incorrecta');
       } else {
-        setError('Error al iniciar sesión');
+        setError('Error al iniciar sesion');
       }
     } finally {
       setLoading(false);
@@ -43,7 +43,7 @@ export default function Login() {
             <div className="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <Lock className="w-8 h-8 text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-gray-900">Panel de Administración</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Panel de Administracion</h1>
             <p className="text-gray-500 mt-2">Ingresa tus credenciales</p>
           </div>
 
@@ -57,7 +57,7 @@ export default function Login() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Correo electrónico
+                Correo electronico
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -74,7 +74,7 @@ export default function Login() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Contraseña
+                Contrasena
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -94,7 +94,7 @@ export default function Login() {
               disabled={loading}
               className="w-full bg-slate-800 hover:bg-slate-900 text-white py-3 rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
+              {loading ? 'Iniciando sesion...' : 'Iniciar Sesion'}
             </button>
           </form>
         </div>
