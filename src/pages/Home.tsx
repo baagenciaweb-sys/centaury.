@@ -6,7 +6,7 @@ import { Package, ChevronRight } from 'lucide-react';
 export default function Home() {
   const { data: categories } = useCollection<Category>('categories');
   const { data: products } = useCollection<Product>('products');
-  const storeName = import.meta.env.VITE_STORE_NAME || 'Mi Tienda';
+  const storeName = import.meta.env.VITE_STORE_NAME || 'centaury';
 
   const featuredProducts = products.slice(0, 4);
 
