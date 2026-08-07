@@ -40,7 +40,7 @@ export default function Contact() {
           <div className="relative z-10 text-center">
 
             <h2 className="text-5xl sm:text-6xl font-bold mb-5 tracking-wide text-emerald-50">
-              ¿Tenés preguntas?
+              ¿Tenes preguntas?
             </h2>
 
             <p className="text-emerald-100/95 mb-8 leading-relaxed text-2xl sm:text-3xl max-w-4xl mx-auto">
