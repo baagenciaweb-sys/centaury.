@@ -3,7 +3,7 @@ import { MapPin, MessageCircle, Phone, Clock } from 'lucide-react';
 export default function Contact() {
   const storeName = import.meta.env.VITE_STORE_NAME || 'Centaury Shop';
   const storeAddress =
-    import.meta.env.VITE_STORE_ADDRESS || 'Direccion de la Tienda';
+    import.meta.env.VITE_STORE_ADDRESS || 'ShowRoom Privado';
   const whatsappNumber =
     import.meta.env.VITE_WHATSAPP_NUMBER || '+5492284740199';
 
