@@ -44,11 +44,11 @@ export default function Home() {
     </div>
 
     <p className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-white mb-6 max-w-3xl leading-tight">
-      Disenos que definen tu identidad.
+      Diseños que definen tu identidad.
     </p>
 
     <p className="text-lg sm:text-xl text-gray-200 mb-8 max-w-2xl leading-relaxed">
-      Prendas premium con tecnologia DTF de ultima generacion, colores intensos y detalles creados para destacar.
+      Prendas premium con tecnologia DTF, colores intensos y detalles creados para destacar.
     </p>
 
     <Link
