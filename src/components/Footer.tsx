@@ -1,11 +1,10 @@
 import { Link } from 'react-router-dom';
-import { ShoppingBag, MessageCircle, MapPin } from 'lucide-react';
-
+import { ShoppingBag, MessageCircle, MapPin, Phone } from 'lucide-react';
 export default function Footer() {
   const storeName = import.meta.env.VITE_STORE_NAME || 'Centaury shop';
   const storeAddress = import.meta.env.VITE_STORE_ADDRESS || 'Direccion de la Tienda';
   const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER || '+5492284740199';
-
+  const storePhone = import.meta.env.VITE_STORE_PHONE || whatsappNumber;
   return (
     <footer className="bg-slate-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -22,7 +21,6 @@ export default function Footer() {
               Tu tienda de confianza con los mejores productos.
             </p>
           </div>
-
           {/* Links */}
           <div>
             <h3 className="font-semibold text-lg mb-4 tracking-[0.12em]" style={{ fontFamily: 'Manrope, sans-serif' }}>Navegacion</h3>
@@ -41,7 +39,6 @@ export default function Footer() {
               </Link>
             </nav>
           </div>
-
           {/* Contact */}
           <div>
             <h3 className="font-semibold text-lg mb-4 tracking-[0.12em]" style={{ fontFamily: 'Manrope, sans-serif' }}>Contacto</h3>
@@ -59,10 +56,16 @@ export default function Footer() {
                 <MessageCircle className="w-5 h-5 flex-shrink-0" />
                 <span>WhatsApp</span>
               </a>
+              <a
+                href={`tel:${storePhone}`}
+                className="flex items-center gap-3 text-gray-400 hover:text-white transition-colors"
+              >
+                <Phone className="w-5 h-5 flex-shrink-0" />
+                <span>Llamar</span>
+              </a>
             </div>
           </div>
         </div>
-
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500 text-sm">
           <p>&copy; {new Date().getFullYear()} {storeName}.tienda creada por Elquedigitaliza® Todos los derechos reservados.</p>
         </div>
