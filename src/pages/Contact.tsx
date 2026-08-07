@@ -1,7 +1,7 @@
 import { MapPin, MessageCircle, Phone, Clock } from 'lucide-react';
 
 export default function Contact() {
-  const storeName = import.meta.env.VITE_STORE_NAME || 'Mi Tienda';
+  const storeName = import.meta.env.VITE_STORE_NAME || 'Centaury Shop';
   const storeAddress =
     import.meta.env.VITE_STORE_ADDRESS || 'Direccion de la Tienda';
   const whatsappNumber =
@@ -26,7 +26,7 @@ export default function Contact() {
         </div>
 
         {/* ================================================== */}
-        {/* 1 - TENÉS PREGUNTAS */}
+        {/* 1 - TENES PREGUNTAS */}
         {/* ================================================== */}
 
         <div className="relative overflow-hidden rounded-[28px] border border-emerald-300/40 bg-[radial-gradient(circle_at_top_left,_rgba(16,185,129,0.45),_transparent_35%),linear-gradient(135deg,_#052e16_0%,_#065f46_45%,_#022c22_100%)] p-8 sm:p-12 text-white shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_0_40px_rgba(16,185,129,0.22),0_20px_60px_rgba(0,0,0,0.35)]">
