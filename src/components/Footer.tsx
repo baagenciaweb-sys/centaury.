@@ -2,9 +2,9 @@ import { Link } from 'react-router-dom';
 import { ShoppingBag, MessageCircle, MapPin } from 'lucide-react';
 
 export default function Footer() {
-  const storeName = import.meta.env.VITE_STORE_NAME || 'Mi Tienda';
+  const storeName = import.meta.env.VITE_STORE_NAME || 'Centaury shop';
   const storeAddress = import.meta.env.VITE_STORE_ADDRESS || 'Direccion de la Tienda';
-  const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER || '1234567890';
+  const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER || '+5492284740199';
 
   return (
     <footer className="bg-slate-900 text-white">
@@ -64,7 +64,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500 text-sm">
-          <p>&copy; {new Date().getFullYear()} {storeName}. Todos los derechos reservados.</p>
+          <p>&copy; {new Date().getFullYear()} {storeName}.tienda creada por Elquedigitaliza® Todos los derechos reservados.</p>
         </div>
       </div>
     </footer>
