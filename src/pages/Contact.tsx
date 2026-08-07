@@ -168,11 +168,11 @@ export default function Contact() {
                   </h3>
 
                   <p className="text-gray-600 text-lg leading-relaxed">
-                    Lunes a Viernes: 9:00 - 18:00
+                    Cordinamos un horario para tu visita 
                   </p>
 
                   <p className="text-gray-600 text-lg leading-relaxed">
-                    Sabados: 10:00 - 14:00
+                    via WhatsApp
                   </p>
                 </div>
 
