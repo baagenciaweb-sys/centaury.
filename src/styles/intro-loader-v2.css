@@ -1,0 +1,221 @@
+:root{
+    --bg: #000000;
+    --white: #ffffff;
+    --grey: #6f6f6f;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  .centaury-intro{
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+    overflow: hidden;
+  }
+
+  .intro-inner{
+    position: relative;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap: 26px;
+  }
+
+  /* ---------- ACT 1: la línea que se forma ---------- */
+  .seed-line{
+    position:absolute;
+    top:50%;
+    left:50%;
+    width: 1px;
+    height: 1px;
+    background: var(--white);
+    transform: translate(-50%,-50%);
+    border-radius: 50%;
+    box-shadow: 0 0 0px rgba(255,255,255,0);
+    animation: seed-pulse 0.5s ease-out 0.15s forwards;
+  }
+  @keyframes seed-pulse{
+    0%   { width:1px; height:1px; box-shadow:0 0 0 rgba(255,255,255,0); opacity:1; }
+    60%  { box-shadow:0 0 24px rgba(255,255,255,.9); }
+    100% { width:3px; height:3px; box-shadow:0 0 10px rgba(255,255,255,.6); opacity:1; }
+  }
+
+  .seed-line::before,
+  .seed-line::after{
+    content:"";
+    position:absolute;
+    top:50%;
+    width:0;
+    height:1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.85));
+    animation: line-grow .55s cubic-bezier(.4,0,.2,1) .62s forwards,
+               line-fade .5s ease-in 1.55s forwards;
+  }
+  .seed-line::before{ right:50%; transform: scaleX(-1) translateY(-50%); transform-origin:left; }
+  .seed-line::after{  left:50%;  transform: translateY(-50%); transform-origin:left; background: linear-gradient(90deg, rgba(255,255,255,.85), transparent); }
+
+  @keyframes line-grow{ to{ width: 210px; } }
+  @keyframes line-fade{ to{ opacity: 0; } }
+
+  .seed-flash{
+    position:absolute;
+    top:50%; left:50%;
+    width:210px; height:1px;
+    background: var(--white);
+    transform: translate(-50%,-50%) scaleX(0);
+    transform-origin:center;
+    opacity:0;
+    animation: flash 0.35s ease-out 1.12s forwards;
+  }
+  @keyframes flash{
+    0%   { opacity:0; filter: blur(0px); }
+    35%  { opacity:1; transform: translate(-50%,-50%) scaleX(2.6); filter: blur(1px); }
+    100% { opacity:0; transform: translate(-50%,-50%) scaleX(4.2); filter: blur(3px); }
+  }
+
+  /* ---------- ACT 2: el logo emerge ---------- */
+  .logo-stage{
+    position: relative;
+    width: min(74vw, 500px);
+  }
+
+  .logo-stage svg{
+    display:block;
+    width:100%;
+    height:auto;
+    opacity:0;
+    filter: blur(14px);
+    clip-path: polygon(0 0, -14% 0, -30% 100%, -14% 100%);
+    animation:
+      logo-clip 1.05s cubic-bezier(.65,0,.35,1) 1.28s forwards,
+      logo-focus 1.05s ease-out 1.28s forwards,
+      logo-settle .5s ease-out 2.28s forwards;
+  }
+
+  @keyframes logo-clip{
+    0%   { clip-path: polygon(0 0, -14% 0, -30% 100%, -14% 100%); }
+    100% { clip-path: polygon(0 0, 118% 0, 102% 100%, -14% 100%); }
+  }
+  @keyframes logo-focus{
+    0%   { opacity:0; filter: blur(14px); }
+    55%  { opacity:1; }
+    100% { opacity:1; filter: blur(0px); }
+  }
+  @keyframes logo-settle{
+    0%   { transform: scale(1.045); }
+    60%  { transform: scale(0.992); }
+    100% { transform: scale(1); }
+  }
+
+  /* brillo que barre junto al borde del reveal */
+  .beam{
+    position:absolute;
+    top: -25%;
+    left: 0;
+    width: 9%;
+    height: 150%;
+    opacity: 0;
+    background: linear-gradient(
+      100deg,
+      transparent 0%,
+      transparent 30%,
+      rgba(255,255,255,.95) 48%,
+      transparent 70%,
+      transparent 100%
+    );
+    transform: skewX(-18deg) translateX(-130%);
+    animation: beam-sweep 1.05s cubic-bezier(.65,0,.35,1) 1.28s forwards;
+    mix-blend-mode: screen;
+    pointer-events:none;
+  }
+  @keyframes beam-sweep{
+    0%   { transform: skewX(-18deg) translateX(-130%); opacity:1; }
+    85%  { opacity:1; }
+    100% { transform: skewX(-18deg) translateX(1200%); opacity:0; }
+  }
+
+  .glow-pulse{
+    position:absolute; inset:-20%;
+    pointer-events:none;
+    opacity:0;
+    background: radial-gradient(ellipse at center, rgba(255,255,255,.16) 0%, transparent 60%);
+    animation: glow-pulse-anim .7s ease-out 2.28s forwards;
+  }
+  @keyframes glow-pulse-anim{
+    0%{ opacity:0; }
+    40%{ opacity:1; }
+    100%{ opacity:0; }
+  }
+
+  /* ---------- ACT 3: tagline ---------- */
+  .tagline{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:12px;
+    opacity:0;
+    transform: translateY(8px);
+    animation: fade-up .6s ease-out 2.55s forwards;
+  }
+  @keyframes fade-up{ to{ opacity:1; transform:translateY(0); } }
+
+  .tagline span{
+    font-size: 11px;
+    letter-spacing:.44em;
+    text-transform:uppercase;
+    color: var(--grey);
+    font-weight:500;
+    padding-left:.44em;
+  }
+  .tagline .rule{
+    width:0; height:1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.6), transparent);
+    animation: rule-grow .8s ease-out 2.7s forwards;
+  }
+  @keyframes rule-grow{ to{ width:70px; } }
+
+  /* ---------- skip ---------- */
+  .intro-skip{
+    position:absolute;
+    bottom:28px; right:28px;
+    background:transparent;
+    border:1px solid rgba(255,255,255,.16);
+    color: var(--grey);
+    font-size:11px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    padding:9px 16px;
+    border-radius:999px;
+    cursor:pointer;
+    opacity:0;
+    animation: fade-up .5s ease-out 2.8s forwards;
+    transition: border-color .25s ease, color .25s ease;
+  }
+  .intro-skip:hover{ border-color: rgba(255,255,255,.55); color:#fff; }
+
+  /* ---------- salida ---------- */
+  .centaury-intro.exiting .intro-inner,
+  .centaury-intro.exiting .intro-skip{
+    animation: exit-fade .55s ease forwards;
+  }
+  @keyframes exit-fade{
+    to{ opacity:0; transform: scale(1.03); filter: blur(6px); }
+  }
+  .centaury-intro.exiting{
+    transition: opacity .6s ease .15s;
+    opacity: 0;
+  }
+  .centaury-intro.hidden{ display:none; }
+
+  @media (prefers-reduced-motion: reduce){
+    .seed-line, .seed-line::before, .seed-line::after, .seed-flash, .beam, .glow-pulse{ display:none; }
+    .logo-stage svg{ animation:none; opacity:1; filter:none; clip-path:none; }
+    .tagline{ animation:none; opacity:1; transform:none; }
+    .tagline .rule{ animation:none; width:70px; }
+    .intro-skip{ animation:none; opacity:1; }
+    .centaury-intro.exiting{ transition: opacity .3s ease; opacity:0; }
+  }

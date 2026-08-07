@@ -13,41 +13,108 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Banner */}
-      <div className="relative overflow-hidden text-white">
-        <div className="absolute inset-0">
-          <img
-            src={heroBanner}
-            alt=""
-            className="h-full w-full object-cover object-[80%_center] scale-[1.04]"
-            style={{ filter: 'brightness(1.65) contrast(1.6) saturate(1.45)', imageRendering: 'auto' }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/70 via-slate-900/50 to-slate-950/60" />
-        </div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 lg:py-32">
-          <div className="mb-3 flex items-center justify-start -mt-4">
-            <img
-              src={logoCentaury}
-              alt={storeName}
-              className="h-32 w-auto sm:h-44 lg:h-64 rounded-3xl object-contain p-4 shadow-2xl ring-1 ring-white/20"
-              style={{ filter: 'drop-shadow(0 0 0 rgba(255,255,255,0.0)) brightness(0.95) contrast(1.05)' }}
-            />
-          </div>
-          <p className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-white mb-6 max-w-3xl leading-tight">
-            Disenos que definen tu identidad.
-          </p>
-          <p className="text-lg sm:text-xl text-gray-200 mb-8 max-w-2xl leading-relaxed">
-            Prendas premium con tecnologia DTF de ultima generacion, colores intensos y detalles creados para destacar.
-          </p>
-          <Link
-            to="/catalog"
-            className="inline-flex items-center px-8 py-4 bg-white text-slate-900 font-bold rounded-xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg"
-          >
-            Ver Catalogo
-            <ChevronRight className="ml-2 w-5 h-5" />
-          </Link>
-        </div>
-      </div>
+    {/* Hero Banner */}
+<div className="relative overflow-hidden text-white">
+
+  {/* Imagen del banner con movimiento automático */}
+  <div className="absolute inset-0 overflow-hidden">
+    <img
+      src={heroBanner}
+      alt=""
+      className="hero-banner-pan"
+    />
+
+    {/* Capa oscura para que el texto se lea bien */}
+    <div className="absolute inset-0 bg-gradient-to-r from-slate-950/70 via-slate-900/40 to-slate-950/60" />
+  </div>
+
+  {/* Contenido del banner */}
+  <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 lg:py-32">
+
+    <div className="mb-3 flex items-center justify-start -mt-4">
+      <img
+        src={logoCentaury}
+        alt={storeName}
+        className="h-32 w-auto sm:h-44 lg:h-64 rounded-3xl object-contain p-4 shadow-2xl ring-1 ring-white/20"
+        style={{
+          filter:
+            'drop-shadow(0 0 0 rgba(255,255,255,0.0)) brightness(0.95) contrast(1.05)'
+        }}
+      />
+    </div>
+
+    <p className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-white mb-6 max-w-3xl leading-tight">
+      Disenos que definen tu identidad.
+    </p>
+
+    <p className="text-lg sm:text-xl text-gray-200 mb-8 max-w-2xl leading-relaxed">
+      Prendas premium con tecnologia DTF de ultima generacion, colores intensos y detalles creados para destacar.
+    </p>
+
+    <Link
+      to="/catalog"
+      className="inline-flex items-center px-8 py-4 bg-white text-slate-900 font-bold rounded-xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg"
+    >
+      Ver Catalogo
+      <ChevronRight className="ml-2 w-5 h-5" />
+    </Link>
+
+  </div>
+
+  {/* Animación del banner */}
+  <style>{`
+    .hero-banner-pan {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 150%;
+      height: 100%;
+      max-width: none;
+      object-fit: cover;
+      object-position: center center;
+
+      filter: brightness(1.65) contrast(1.6) saturate(1.45);
+
+      animation: bannerPan 14s ease-in-out infinite alternate;
+      will-change: transform;
+    }
+
+    @keyframes bannerPan {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-33.333%);
+      }
+    }
+
+    @media (min-width: 768px) {
+      .hero-banner-pan {
+        width: 120%;
+        animation-duration: 18s;
+      }
+
+      @keyframes bannerPan {
+        0% {
+          transform: translateX(0);
+        }
+
+        100% {
+          transform: translateX(-16.666%);
+        }
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-banner-pan {
+        animation: none;
+        transform: translateX(0);
+      }
+    }
+  `}</style>
+
+</div>
 
       {/* Quick Navigation */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
