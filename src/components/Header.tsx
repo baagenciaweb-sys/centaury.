@@ -6,7 +6,7 @@ import { ShoppingBag, ShoppingCart, Menu, X, User } from 'lucide-react';
 export default function Header() {
   const { itemCount } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const storeName = import.meta.env.VITE_STORE_NAME || 'Mi Tienda';
+  const storeName = import.meta.env.VITE_STORE_NAME || 'Centaury Shop';
 
   const navItems = [
     { label: 'Inicio', to: '/' },
