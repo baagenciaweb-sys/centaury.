@@ -5,7 +5,7 @@ export default function Contact() {
   const storeAddress =
     import.meta.env.VITE_STORE_ADDRESS || 'Direccion de la Tienda';
   const whatsappNumber =
-    import.meta.env.VITE_WHATSAPP_NUMBER || '1234567890';
+    import.meta.env.VITE_WHATSAPP_NUMBER || '+5492284740199';
 
   const whatsappLink = `https://wa.me/${whatsappNumber}`;
   const phoneLink = `tel:${whatsappNumber}`;
