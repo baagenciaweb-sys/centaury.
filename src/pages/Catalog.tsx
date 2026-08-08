@@ -117,6 +117,11 @@ function ProductCard({
 }) {
   const category = categories.find(c => c.id === product.categoryId);
   const cardRef = useRef<HTMLDivElement>(null);
+  const hasSizes = !!product.sizes && product.sizes.length > 0;
+  const totalStock = hasSizes
+    ? product.sizes!.reduce((sum, s) => sum + (product.stockBySize?.[s] ?? 0), 0)
+    : Infinity;
+  const isSoldOut = hasSizes && totalStock <= 0;
 
   // --- Tilt 3D al mouse ---
   const mouseX = useMotionValue(0);
@@ -169,6 +174,11 @@ function ProductCard({
               {category.name}
             </span>
           )}
+          {isSoldOut && (
+            <span className="absolute top-3 right-3 bg-red-600/90 backdrop-blur-sm text-xs font-bold text-white px-2 py-1 rounded-full">
+              Agotado
+            </span>
+          )}
         </div>
       </Link>
       
@@ -191,7 +201,7 @@ function ProductCard({
               className="flex items-center gap-2 bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-lg transition-colors"
             >
               <ShoppingCart className="w-4 h-4" />
-              <span className="text-sm font-medium">Elegir talle</span>
+              <span className="text-sm font-medium">{isSoldOut ? 'Ver producto' : 'Elegir talle'}</span>
             </Link>
           ) : (
             <button
@@ -223,13 +233,21 @@ function ProductDetail({
   const category = categories.find(c => c.id === product.categoryId);
   const { addToCart, items, updateQuantity } = useCart();
   const hasSizes = !!product.sizes && product.sizes.length > 0;
-  const [selectedSize, setSelectedSize] = useState<string | undefined>(
-    hasSizes ? product.sizes![0] : undefined
-  );
+  const getStock = (size?: string) => {
+    if (!size) return Infinity;
+    return product.stockBySize?.[size] ?? 0;
+  };
+  const firstAvailableSize = hasSizes
+    ? product.sizes!.find(s => getStock(s) > 0) || product.sizes![0]
+    : undefined;
+  const [selectedSize, setSelectedSize] = useState<string | undefined>(firstAvailableSize);
   const cartItem = items.find(
     item => item.product.id === product.id && (item.selectedSize || undefined) === (selectedSize || undefined)
   );
   const quantity = cartItem?.quantity || 0;
+  const sizeStock = getStock(selectedSize);
+  const outOfStock = hasSizes && selectedSize ? sizeStock <= 0 : false;
+  const reachedMax = hasSizes && selectedSize ? quantity >= sizeStock : false;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -282,21 +300,35 @@ function ProductDetail({
                     Talle
                   </label>
                   <div className="flex flex-wrap gap-2">
-                    {product.sizes!.map(size => (
-                      <button
-                        key={size}
-                        type="button"
-                        onClick={() => setSelectedSize(size)}
-                        className={`px-4 py-2 rounded-lg font-medium text-sm border transition-colors ${
-                          selectedSize === size
-                            ? 'bg-slate-800 text-white border-slate-800'
-                            : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
-                        }`}
-                      >
-                        {size}
-                      </button>
-                    ))}
+                    {product.sizes!.map(size => {
+                      const stockForSize = getStock(size);
+                      const disabled = stockForSize <= 0;
+                      return (
+                        <button
+                          key={size}
+                          type="button"
+                          onClick={() => !disabled && setSelectedSize(size)}
+                          disabled={disabled}
+                          className={`px-4 py-2 rounded-lg font-medium text-sm border transition-colors ${
+                            disabled
+                              ? 'bg-gray-100 text-gray-400 border-gray-200 line-through cursor-not-allowed'
+                              : selectedSize === size
+                                ? 'bg-slate-800 text-white border-slate-800'
+                                : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                          }`}
+                        >
+                          {size}
+                        </button>
+                      );
+                    })}
                   </div>
+                  {selectedSize && (
+                    <p className={`text-xs mt-2 ${outOfStock ? 'text-red-500' : 'text-gray-400'}`}>
+                      {outOfStock
+                        ? 'Talle agotado'
+                        : `${sizeStock} disponibles`}
+                    </p>
+                  )}
                 </div>
               )}
 
@@ -304,11 +336,11 @@ function ProductDetail({
                 {quantity === 0 ? (
                   <button
                     onClick={() => addToCart(product, selectedSize)}
-                    disabled={hasSizes && !selectedSize}
+                    disabled={(hasSizes && !selectedSize) || outOfStock}
                     className="w-full flex items-center justify-center gap-3 bg-slate-800 hover:bg-slate-900 text-white py-4 rounded-xl font-semibold transition-colors text-lg disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <ShoppingCart className="w-5 h-5" />
-                    Agregar al carrito
+                    {outOfStock ? 'Sin stock' : 'Agregar al carrito'}
                   </button>
                 ) : (
                   <div className="flex items-center justify-center gap-4 bg-slate-800 rounded-xl p-2">
@@ -322,8 +354,9 @@ function ProductDetail({
                       {quantity}
                     </span>
                     <button
-                      onClick={() => updateQuantity(product.id, quantity + 1, selectedSize)}
-                      className="w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-lg text-white transition-colors"
+                      onClick={() => !reachedMax && updateQuantity(product.id, quantity + 1, selectedSize)}
+                      disabled={reachedMax}
+                      className="w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-lg text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       <Plus className="w-5 h-5" />
                     </button>
@@ -336,4 +369,6 @@ function ProductDetail({
       </div>
     </div>
   );
+}
+
 }
