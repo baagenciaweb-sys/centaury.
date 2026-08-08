@@ -185,16 +185,26 @@ function ProductCard({
           <span className="text-xl font-bold text-slate-900">
             ${product.price.toFixed(2)}
           </span>
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              onAddToCart();
-            }}
-            className="flex items-center gap-2 bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-lg transition-colors"
-          >
-            <ShoppingCart className="w-4 h-4" />
-            <span className="text-sm font-medium">Agregar</span>
-          </button>
+          {product.sizes && product.sizes.length > 0 ? (
+            <Link
+              to={`/catalog?product=${product.id}`}
+              className="flex items-center gap-2 bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-lg transition-colors"
+            >
+              <ShoppingCart className="w-4 h-4" />
+              <span className="text-sm font-medium">Elegir talle</span>
+            </Link>
+          ) : (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                onAddToCart();
+              }}
+              className="flex items-center gap-2 bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-lg transition-colors"
+            >
+              <ShoppingCart className="w-4 h-4" />
+              <span className="text-sm font-medium">Agregar</span>
+            </button>
+          )}
         </div>
       </div>
     </motion.div>
@@ -212,7 +222,13 @@ function ProductDetail({
 }) {
   const category = categories.find(c => c.id === product.categoryId);
   const { addToCart, items, updateQuantity } = useCart();
-  const cartItem = items.find(item => item.product.id === product.id);
+  const hasSizes = !!product.sizes && product.sizes.length > 0;
+  const [selectedSize, setSelectedSize] = useState<string | undefined>(
+    hasSizes ? product.sizes![0] : undefined
+  );
+  const cartItem = items.find(
+    item => item.product.id === product.id && (item.selectedSize || undefined) === (selectedSize || undefined)
+  );
   const quantity = cartItem?.quantity || 0;
 
   return (
@@ -260,11 +276,36 @@ function ProductDetail({
                 ${product.price.toFixed(2)}
               </div>
 
+              {hasSizes && (
+                <div className="mb-8">
+                  <label className="block text-sm font-medium text-gray-700 mb-3">
+                    Talle
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    {product.sizes!.map(size => (
+                      <button
+                        key={size}
+                        type="button"
+                        onClick={() => setSelectedSize(size)}
+                        className={`px-4 py-2 rounded-lg font-medium text-sm border transition-colors ${
+                          selectedSize === size
+                            ? 'bg-slate-800 text-white border-slate-800'
+                            : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                        }`}
+                      >
+                        {size}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <div className="mt-auto">
                 {quantity === 0 ? (
                   <button
-                    onClick={() => addToCart(product)}
-                    className="w-full flex items-center justify-center gap-3 bg-slate-800 hover:bg-slate-900 text-white py-4 rounded-xl font-semibold transition-colors text-lg"
+                    onClick={() => addToCart(product, selectedSize)}
+                    disabled={hasSizes && !selectedSize}
+                    className="w-full flex items-center justify-center gap-3 bg-slate-800 hover:bg-slate-900 text-white py-4 rounded-xl font-semibold transition-colors text-lg disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <ShoppingCart className="w-5 h-5" />
                     Agregar al carrito
@@ -272,7 +313,7 @@ function ProductDetail({
                 ) : (
                   <div className="flex items-center justify-center gap-4 bg-slate-800 rounded-xl p-2">
                     <button
-                      onClick={() => updateQuantity(product.id, quantity - 1)}
+                      onClick={() => updateQuantity(product.id, quantity - 1, selectedSize)}
                       className="w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-lg text-white transition-colors"
                     >
                       <Minus className="w-5 h-5" />
@@ -281,7 +322,7 @@ function ProductDetail({
                       {quantity}
                     </span>
                     <button
-                      onClick={() => updateQuantity(product.id, quantity + 1)}
+                      onClick={() => updateQuantity(product.id, quantity + 1, selectedSize)}
                       className="w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-lg text-white transition-colors"
                     >
                       <Plus className="w-5 h-5" />
