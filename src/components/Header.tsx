@@ -114,7 +114,7 @@ export default function Header() {
             </Link>
 
             
-              href="/admin/login"
+              <a href="/admin/login"
               className="group hidden items-center gap-2 overflow-hidden rounded-full border border-white/10 bg-black/30 px-3.5 py-2 text-sm font-medium text-slate-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-all duration-500 hover:-translate-y-0.5 hover:border-rose-400/50 hover:text-white hover:shadow-[0_0_20px_rgba(170,40,40,0.16),inset_0_0_18px_rgba(180,60,60,0.08)] active:scale-[0.97] md:flex"
             >
               <span className="absolute inset-0 scale-0 rounded-full bg-[radial-gradient(circle,rgba(190,60,60,0.35),rgba(190,60,60,0.05)_55%,transparent_80%)] transition-transform duration-500 group-hover:scale-150" />
@@ -146,7 +146,7 @@ export default function Header() {
                 </Link>
               ))}
               
-                href="/admin/login"
+                <a href="/admin/login"
                 className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2.5 text-sm font-medium text-slate-200 transition-all duration-300 hover:border-rose-400/40 hover:bg-rose-500/10 hover:text-white"
               >
                 <User className="h-4 w-4" />
