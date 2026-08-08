@@ -5,6 +5,8 @@ import { useStorage } from '../../hooks/useStorage';
 import { Product, Category } from '../../types';
 import { Package, Plus, Edit, Trash2, X, Upload, Image as ImageIcon } from 'lucide-react';
 
+const AVAILABLE_SIZES = ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'];
+
 export default function Products() {
   const { data: products, add, update, remove, loading } = useCollection<Product>('products');
   const { data: categories } = useCollection<Category>('categories');
@@ -19,6 +21,13 @@ export default function Products() {
     imageUrl: ''
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
+
+  const toggleSize = (size: string) => {
+    setSelectedSizes(prev =>
+      prev.includes(size) ? prev.filter(s => s !== size) : [...prev, size]
+    );
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,6 +43,7 @@ export default function Products() {
       price: parseFloat(formData.price),
       categoryId: formData.categoryId,
       imageUrl,
+      sizes: selectedSizes,
       createdAt: new Date()
     };
 
@@ -55,6 +65,7 @@ export default function Products() {
       categoryId: product.categoryId,
       imageUrl: product.imageUrl
     });
+    setSelectedSizes(product.sizes || []);
     setShowForm(true);
   };
 
@@ -69,6 +80,7 @@ export default function Products() {
     setEditingProduct(null);
     setFormData({ name: '', description: '', price: '', categoryId: '', imageUrl: '' });
     setImageFile(null);
+    setSelectedSizes([]);
   };
 
   return (
@@ -118,6 +130,7 @@ export default function Products() {
                   <tr>
                     <th className="text-left py-4 px-6 font-semibold text-gray-900">Producto</th>
                     <th className="text-left py-4 px-6 font-semibold text-gray-900">Categoria</th>
+                    <th className="text-left py-4 px-6 font-semibold text-gray-900">Talles</th>
                     <th className="text-left py-4 px-6 font-semibold text-gray-900">Precio</th>
                     <th className="text-right py-4 px-6 font-semibold text-gray-900">Acciones</th>
                   </tr>
@@ -148,6 +161,19 @@ export default function Products() {
                           <span className="inline-block bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm font-medium">
                             {category?.name || 'Sin categoria'}
                           </span>
+                        </td>
+                        <td className="py-4 px-6">
+                          {product.sizes && product.sizes.length > 0 ? (
+                            <div className="flex flex-wrap gap-1">
+                              {product.sizes.map(size => (
+                                <span key={size} className="inline-block bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-xs font-medium">
+                                  {size}
+                                </span>
+                              ))}
+                            </div>
+                          ) : (
+                            <span className="text-sm text-gray-400">Sin talles</span>
+                          )}
                         </td>
                         <td className="py-4 px-6 font-semibold text-gray-900">
                           ${product.price.toFixed(2)}
@@ -253,6 +279,34 @@ export default function Products() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Talles disponibles
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {AVAILABLE_SIZES.map(size => {
+                    const isSelected = selectedSizes.includes(size);
+                    return (
+                      <button
+                        key={size}
+                        type="button"
+                        onClick={() => toggleSize(size)}
+                        className={`px-4 py-2 rounded-lg font-medium text-sm border transition-colors ${
+                          isSelected
+                            ? 'bg-slate-800 text-white border-slate-800'
+                            : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                        }`}
+                      >
+                        {size}
+                      </button>
+                    );
+                  })}
+                </div>
+                <p className="text-xs text-gray-400 mt-2">
+                  Si no seleccionas ningun talle, el producto se vende sin opcion de talle.
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Imagen del producto
                 </label>
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-slate-400 transition-colors">
@@ -288,21 +342,23 @@ export default function Products() {
                     )}
                   </label>
                 </div>
-              </div><div className="mt-3">
-  <label className="block text-sm font-medium text-gray-700 mb-2">
-    O pega una URL de imagen
-  </label>
-  <input
-    type="text"
-    placeholder="https://ejemplo.com/imagen.jpg"
-    value={formData.imageUrl}
-    onChange={(e) => {
-      setFormData({ ...formData, imageUrl: e.target.value });
-      setImageFile(null);
-    }}
-    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-800 focus:border-transparent"
-  />
-</div>
+              </div>
+
+              <div className="mt-3">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  O pega una URL de imagen
+                </label>
+                <input
+                  type="text"
+                  placeholder="https://ejemplo.com/imagen.jpg"
+                  value={formData.imageUrl}
+                  onChange={(e) => {
+                    setFormData({ ...formData, imageUrl: e.target.value });
+                    setImageFile(null);
+                  }}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-800 focus:border-transparent"
+                />
+              </div>
 
               <div className="flex gap-3 pt-4">
                 <button
