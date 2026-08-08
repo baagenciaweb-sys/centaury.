@@ -282,15 +282,47 @@ animation: centauryRedFog 22s ease-in-out infinite alternate;
     background-size: 260% 100%;
     background-position: 0% 50%;
     transform: none;
-    animation: heroBannerPanMobile 35s ease-in-out infinite;
+    animation: heroBannerPanMobile 25s ease-in-out infinite;
+    will-change: background-position;
   }
 
   @keyframes heroBannerPanMobile {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    0% {
+      background-position: 0% 50%;
+    }
+
+    50% {
+      background-position: 100% 50%;
+    }
+
+    100% {
+      background-position: 0% 50%;
+    }
   }
 }
+¿Qué cambia?
+
+Antes:
+
+9 segundos → izquierda → derecha → izquierda
+
+Ahora:
+
+18 segundos → izquierda → derecha → izquierda
+
+Por lo tanto, el movimiento va a ser aproximadamente el doble de lento y mucho menos brusco.
+
+Además, ease-in-out hace que:
+
+🐢 Empiece lentamente
+➡️ Tome velocidad suavemente
+🐢 Frene antes de llegar al extremo
+🔄 Vuelva sin un cambio brusco
+Si lo querés todavía más cinematográfico
+
+Podemos llevarlo a 25–30 segundos, con un paneo casi imperceptible, que para una tienda de ropa puede quedar mucho más premium.
+
+Yo probaría primero los 18 segundos. No tocaría nada más de tu página hasta ver cómo queda en el celular.
 
 /* =========================================================
    PANEL ADMIN - ESTILO NEON CYBER
