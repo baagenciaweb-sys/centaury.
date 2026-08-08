@@ -12,48 +12,214 @@
   font-display: swap;
 }
 
+/* =========================================================
+   CENTAURY SHOP - BASE
+   ========================================================= */
+
 :root {
   font-family: 'Manrope', 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
+
   color: #f5f5f5;
-  background-color: #1a1a1a;
+  background-color: #050505;
+
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --centaury-black: #050505;
+  --centaury-black-soft: #0b0809;
+  --centaury-red: #3d070b;
+  --centaury-red-dark: #210406;
 }
 
+/* =========================================================
+   FONDO GENERAL
+   ========================================================= */
+
 @layer base {
+
+  html {
+    background: #050505;
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply antialiased;
-    font-family: 'Manrope', 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    color: #f5f5f5;
-    background:
-      radial-gradient(circle at 15% 20%, rgba(144, 34, 34, 0.12), transparent 26%),
-      radial-gradient(circle at 85% 15%, rgba(180, 180, 180, 0.08), transparent 22%),
-      linear-gradient(135deg, #1a1a1a 0%, #202124 45%, #2a2a2a 100%);
+
+    margin: 0;
+    min-width: 320px;
     min-height: 100vh;
+
+    font-family: 'Manrope', 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+    color: #f5f5f5;
+
+    /*
+      Fondo principal:
+      NEGRO arriba
+      ROJO OSCURO hacia abajo
+    */
+
+    background:
+      radial-gradient(
+        ellipse 70% 45% at 15% 15%,
+        rgba(110, 8, 15, 0.20),
+        transparent 70%
+      ),
+      radial-gradient(
+        ellipse 65% 50% at 85% 35%,
+        rgba(95, 5, 12, 0.16),
+        transparent 72%
+      ),
+      linear-gradient(
+        180deg,
+        #030303 0%,
+        #070506 22%,
+        #110608 45%,
+        #21070a 68%,
+        #35090d 100%
+      );
+
+    background-attachment: fixed;
+    background-size: 140% 140%;
+
+    overflow-x: hidden;
+
+    /*
+      Animación suave del fondo.
+    */
+    animation: centauryBackgroundMove 18s ease-in-out infinite alternate;
   }
+
+  /*
+    Capa de neblina roja.
+    */
 
   body::before {
     content: '';
+
     position: fixed;
-    inset: 0;
+    inset: -20%;
+
+    z-index: -1;
+
     pointer-events: none;
-    background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 35%, transparent 100%);
-    mix-blend-mode: screen;
+
+    background:
+      radial-gradient(
+        ellipse 35% 25% at 20% 35%,
+        rgba(150, 12, 22, 0.18),
+        transparent 70%
+      ),
+      radial-gradient(
+        ellipse 40% 30% at 80% 65%,
+        rgba(120, 8, 16, 0.20),
+        transparent 70%
+      ),
+      radial-gradient(
+        ellipse 30% 25% at 50% 90%,
+        rgba(90, 5, 10, 0.20),
+        transparent 75%
+      );
+
+    filter: blur(45px);
+
+    opacity: 0.9;
+
+    transform: translate3d(0, 0, 0);
+
+    animation: centauryRedFog 22s ease-in-out infinite alternate;
   }
+
+  /*
+    Viñeta oscura.
+    Mantiene el centro visible y da aspecto premium.
+  */
 
   body::after {
     content: '';
+
     position: fixed;
     inset: 0;
+
+    z-index: -1;
+
     pointer-events: none;
-    box-shadow: inset 0 0 80px rgba(0,0,0,0.45), inset 0 0 0 1px rgba(255,255,255,0.03);
+
+    background:
+      radial-gradient(
+        ellipse at center,
+        transparent 35%,
+        rgba(0, 0, 0, 0.18) 70%,
+        rgba(0, 0, 0, 0.55) 100%
+      );
+
+    box-shadow:
+      inset 0 0 120px rgba(0, 0, 0, 0.55);
+
+    pointer-events: none;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  /*
+    Movimiento principal del degradado.
+  */
+
+  @keyframes centauryBackgroundMove {
+
+    0% {
+      background-position:
+        0% 0%;
+    }
+
+    50% {
+      background-position:
+        45% 30%;
+    }
+
+    100% {
+      background-position:
+        100% 70%;
+    }
+  }
+
+  /*
+    Movimiento lento de la neblina roja.
+  */
+
+  @keyframes centauryRedFog {
+
+    0% {
+      transform:
+        translate3d(-2%, -1%, 0)
+        scale(1);
+    }
+
+    50% {
+      transform:
+        translate3d(3%, 2%, 0)
+        scale(1.05);
+    }
+
+    100% {
+      transform:
+        translate3d(-1%, 4%, 0)
+        scale(1.08);
+    }
+  }
+
+  /*
+    Títulos de Centaury.
+  */
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: 'ModernTokyo', 'Manrope', 'Segoe UI', sans-serif;
     letter-spacing: 0.02em;
   }
@@ -61,9 +227,24 @@
   .font-brand {
     font-family: 'ModernTokyo', 'Manrope', 'Segoe UI', sans-serif;
   }
+
+  /*
+    Evita que el contenido genere una página blanca
+    por defecto.
+  */
+
+  #root {
+    min-height: 100vh;
+    background: transparent;
+  }
 }
 
+/* =========================================================
+   UTILIDADES
+   ========================================================= */
+
 @layer utilities {
+
   .line-clamp-1 {
     display: -webkit-box;
     -webkit-line-clamp: 1;
@@ -76,5 +257,37 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+}
+
+/* =========================================================
+   REDUCCIÓN DE MOVIMIENTO
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  body,
+  body::before {
+    animation: none !important;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+  body {
+    background-size: 180% 180%;
+    animation-duration: 24s;
+  }
+
+  body::before {
+    filter: blur(55px);
   }
 }
