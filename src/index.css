@@ -268,21 +268,33 @@ animation: centauryRedFog 22s ease-in-out infinite alternate;
   background-size: cover;
   transform: scale(1.08);
   animation: heroBannerPanDesktop 18s ease-in-out infinite;
+  will-change: transform;
 }
 
 @keyframes heroBannerPanDesktop {
-  0% { transform: scale(1.08) translateX(0%); }
-  50% { transform: scale(1.08) translateX(-3%); }
-  100% { transform: scale(1.08) translateX(0%); }
+  0% {
+    transform: scale(1.08) translateX(0%);
+  }
+
+  50% {
+    transform: scale(1.08) translateX(-3%);
+  }
+
+  100% {
+    transform: scale(1.08) translateX(0%);
+  }
 }
 
-/* En mobile: paneo de punta a punta, ida y vuelta, infinito */
+/* =========================================================
+   HERO BANNER - MOBILE
+   ========================================================= */
+
 @media (max-width: 768px) {
   .hero-banner-pan {
     background-size: 260% 100%;
     background-position: 0% 50%;
     transform: none;
-    animation: heroBannerPanMobile 25s ease-in-out infinite;
+    animation: heroBannerPanMobile 18s ease-in-out infinite;
     will-change: background-position;
   }
 
