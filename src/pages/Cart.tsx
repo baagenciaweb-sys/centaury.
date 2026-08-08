@@ -26,7 +26,7 @@ export default function Cart() {
 
   const whatsappMessage = encodeURIComponent(
     `Hola! Me gustaria hacer el siguiente pedido:\n\n${items
-      .map(item => `- ${item.product.name} x${item.quantity} = $${(item.product.price * item.quantity).toFixed(2)}`)
+      .map(item => `- ${item.product.name}${item.selectedSize ? ` (Talle ${item.selectedSize})` : ''} x${item.quantity} = $${(item.product.price * item.quantity).toFixed(2)}`)
       .join('\n')}\n\nTotal: $${total.toFixed(2)}`
   );
 
@@ -49,7 +49,7 @@ export default function Cart() {
         <div className="space-y-4">
           {items.map(item => (
             <CartItemCard
-              key={item.product.id}
+              key={`${item.product.id}-${item.selectedSize || 'nosize'}`}
               item={item}
               onUpdateQuantity={updateQuantity}
               onRemove={removeFromCart}
@@ -97,11 +97,11 @@ function CartItemCard({
   onUpdateQuantity,
   onRemove
 }: {
-  item: { product: any; quantity: number };
-  onUpdateQuantity: (id: string, qty: number) => void;
-  onRemove: (id: string) => void;
+  item: { product: any; quantity: number; selectedSize?: string };
+  onUpdateQuantity: (id: string, qty: number, selectedSize?: string) => void;
+  onRemove: (id: string, selectedSize?: string) => void;
 }) {
-  const { product, quantity } = item;
+  const { product, quantity, selectedSize } = item;
 
   return (
     <div className="bg-white rounded-xl shadow-sm p-4 flex gap-4">
@@ -121,9 +121,16 @@ function CartItemCard({
 
       <div className="flex-1 min-w-0">
         <div className="flex justify-between items-start mb-2">
-          <h3 className="font-semibold text-gray-900 line-clamp-1">{product.name}</h3>
+          <div>
+            <h3 className="font-semibold text-gray-900 line-clamp-1">{product.name}</h3>
+            {selectedSize && (
+              <span className="inline-block mt-1 bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-xs font-medium">
+                Talle {selectedSize}
+              </span>
+            )}
+          </div>
           <button
-            onClick={() => onRemove(product.id)}
+            onClick={() => onRemove(product.id, selectedSize)}
             className="text-gray-400 hover:text-red-500 transition-colors p-1"
           >
             <Trash2 className="w-5 h-5" />
@@ -135,14 +142,14 @@ function CartItemCard({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3 bg-gray-100 rounded-lg p-1">
             <button
-              onClick={() => onUpdateQuantity(product.id, quantity - 1)}
+              onClick={() => onUpdateQuantity(product.id, quantity - 1, selectedSize)}
               className="w-8 h-8 flex items-center justify-center hover:bg-white rounded transition-colors"
             >
               <Minus className="w-4 h-4" />
             </button>
             <span className="font-semibold w-6 text-center">{quantity}</span>
             <button
-              onClick={() => onUpdateQuantity(product.id, quantity + 1)}
+              onClick={() => onUpdateQuantity(product.id, quantity + 1, selectedSize)}
               className="w-8 h-8 flex items-center justify-center hover:bg-white rounded transition-colors"
             >
               <Plus className="w-4 h-4" />
