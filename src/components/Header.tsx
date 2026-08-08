@@ -54,17 +54,18 @@ export default function Header() {
           <div className="relative flex items-center gap-2 sm:gap-3">
             <Link
               to="/cart"
-              className="group relative overflow-hidden rounded-full border border-white/10 bg-black/30 p-2.5 text-slate-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-all duration-500 hover:-translate-y-0.5 hover:border-rose-400/50 hover:text-white hover:shadow-[0_0_20px_rgba(170,40,40,0.16),inset_0_0_18px_rgba(180,60,60,0.08)] active:scale-[0.97]"
+              className="group relative rounded-full border border-white/10 bg-black/30 p-2.5 text-slate-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-all duration-500 hover:-translate-y-0.5 hover:border-rose-400/50 hover:text-white hover:shadow-[0_0_20px_rgba(170,40,40,0.16),inset_0_0_18px_rgba(180,60,60,0.08)] active:scale-[0.97]"
             >
-              <span className="absolute inset-0 scale-0 rounded-full bg-[radial-gradient(circle,rgba(190,60,60,0.35),rgba(190,60,60,0.05)_55%,transparent_80%)] transition-transform duration-500 group-hover:scale-150" />
+              <span className="absolute inset-0 overflow-hidden rounded-full">
+                <span className="absolute inset-0 scale-0 rounded-full bg-[radial-gradient(circle,rgba(190,60,60,0.35),rgba(190,60,60,0.05)_55%,transparent_80%)] transition-transform duration-500 group-hover:scale-150" />
+              </span>
               <ShoppingCart className="relative z-10 h-5 w-5 sm:h-6 sm:w-6" />
               {itemCount > 0 && (
-                <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-rose-500/90 text-[10px] font-bold text-white">
+                <span className="absolute -right-1 -top-1 z-20 flex h-5 w-5 items-center justify-center rounded-full bg-rose-500/90 text-[10px] font-bold text-white">
                   {itemCount}
                 </span>
               )}
             </Link>
-
             <a href="/admin/login"
               className="group hidden items-center gap-2 overflow-hidden rounded-full border border-white/10 bg-black/30 px-3.5 py-2 text-sm font-medium text-slate-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-all duration-500 hover:-translate-y-0.5 hover:border-rose-400/50 hover:text-white hover:shadow-[0_0_20px_rgba(170,40,40,0.16),inset_0_0_18px_rgba(180,60,60,0.08)] active:scale-[0.97] md:flex"
             >
