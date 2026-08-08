@@ -282,7 +282,7 @@ animation: centauryRedFog 22s ease-in-out infinite alternate;
     background-size: 260% 100%;
     background-position: 0% 50%;
     transform: none;
-    animation: heroBannerPanMobile 18s ease-in-out infinite;
+    animation: heroBannerPanMobile 35s ease-in-out infinite;
   }
 
   @keyframes heroBannerPanMobile {
