@@ -35,7 +35,9 @@ export function useCollection<T extends { id?: string }>(path: string) {
         id: doc.id
       } as T));
       setData(items);
+      setError(null);
     } catch (err) {
+      console.error(`Error fetching ${path}:`, err);
       setError(err as Error);
     } finally {
       setLoading(false);
@@ -47,28 +49,49 @@ export function useCollection<T extends { id?: string }>(path: string) {
   }, [path]);
 
   const add = async (item: Omit<T, 'id'>) => {
-    const ref = getCollection<T>(path);
-    const docRef = await addDoc(ref, {
-      ...item,
-      createdAt: new Date()
-    });
-    await fetchData();
-    return docRef.id;
+    try {
+      const ref = getCollection<T>(path);
+      const docRef = await addDoc(ref, {
+        ...item,
+        createdAt: new Date()
+      });
+      await fetchData();
+      return docRef.id;
+    } catch (err) {
+      console.error(`Error adding to ${path}:`, err);
+      setError(err as Error);
+      alert(`No se pudo guardar: ${(err as Error).message}`);
+      throw err;
+    }
   };
 
   const update = async (id: string, updates: Partial<T>) => {
-    const ref = doc(db, path, id);
-    await updateDoc(ref, {
-      ...updates,
-      updatedAt: new Date()
-    });
-    await fetchData();
+    try {
+      const ref = doc(db, path, id);
+      await updateDoc(ref, {
+        ...updates,
+        updatedAt: new Date()
+      });
+      await fetchData();
+    } catch (err) {
+      console.error(`Error updating ${path}/${id}:`, err);
+      setError(err as Error);
+      alert(`No se pudo actualizar: ${(err as Error).message}`);
+      throw err;
+    }
   };
 
   const remove = async (id: string) => {
-    const ref = doc(db, path, id);
-    await deleteDoc(ref);
-    await fetchData();
+    try {
+      const ref = doc(db, path, id);
+      await deleteDoc(ref);
+      await fetchData();
+    } catch (err) {
+      console.error(`Error deleting ${path}/${id}:`, err);
+      setError(err as Error);
+      alert(`No se pudo eliminar: ${(err as Error).message}`);
+      throw err;
+    }
   };
 
   return { data, loading, error, add, update, remove, refetch: fetchData };
@@ -84,7 +107,6 @@ export function useDocument<T extends { id?: string }>(path: string, id: string 
       setLoading(false);
       return;
     }
-
     const fetchData = async () => {
       try {
         setLoading(true);
@@ -101,7 +123,6 @@ export function useDocument<T extends { id?: string }>(path: string, id: string 
         setLoading(false);
       }
     };
-
     fetchData();
   }, [path, id]);
 
