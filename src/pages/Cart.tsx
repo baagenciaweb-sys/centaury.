@@ -1,10 +1,13 @@
 import { Link } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
+import { useCollection } from '../hooks/useFirestore';
+import { Category } from '../types';
 import { Package, Trash2, ShoppingBag, Plus, Minus } from 'lucide-react';
 
 export default function Cart() {
   const { items, updateQuantity, removeFromCart, clearCart, total, itemCount } = useCart();
-  const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER || '1234567890';
+  const { data: categories } = useCollection<Category>('categories');
+  const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER || '5492284740199';
 
   if (items.length === 0) {
     return (
@@ -24,10 +27,34 @@ export default function Cart() {
     );
   }
 
+  // Agrupar los items del carrito por categoria
+  const groups = categories
+    .map(category => ({
+      category,
+      items: items.filter(item => item.product.categoryId === category.id),
+    }))
+    .filter(group => group.items.length > 0);
+
+  const itemsWithoutCategory = items.filter(
+    item => !categories.some(c => c.id === item.product.categoryId)
+  );
+
   const whatsappMessage = encodeURIComponent(
-    `Hola! Me gustaria hacer el siguiente pedido:\n\n${items
-      .map(item => `- ${item.product.name}${item.selectedSize ? ` (Talle ${item.selectedSize})` : ''} x${item.quantity} = $${(item.product.price * item.quantity).toFixed(2)}`)
-      .join('\n')}\n\nTotal: $${total.toFixed(2)}`
+    `Hola! Me gustaria hacer el siguiente pedido:\n\n` +
+      groups
+        .map(group =>
+          `*${group.category.name.toUpperCase()}*\n` +
+          group.items
+            .map(item => `- ${item.product.name}${item.selectedSize ? ` (Talle ${item.selectedSize})` : ''} x${item.quantity} = $${(item.product.price * item.quantity).toFixed(2)}`)
+            .join('\n')
+        )
+        .join('\n\n') +
+      (itemsWithoutCategory.length > 0
+        ? `\n\n${itemsWithoutCategory
+            .map(item => `- ${item.product.name}${item.selectedSize ? ` (Talle ${item.selectedSize})` : ''} x${item.quantity} = $${(item.product.price * item.quantity).toFixed(2)}`)
+            .join('\n')}`
+        : '') +
+      `\n\nTotal: $${total.toFixed(2)}`
   );
 
   return (
@@ -46,22 +73,61 @@ export default function Cart() {
           </button>
         </div>
 
-        <div className="space-y-4">
-          {items.map(item => (
-            <CartItemCard
-              key={`${item.product.id}-${item.selectedSize || 'nosize'}`}
-              item={item}
-              onUpdateQuantity={updateQuantity}
-              onRemove={removeFromCart}
-            />
+        <div className="space-y-8">
+          {groups.map(group => (
+            <div key={group.category.id}>
+              <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500 mb-3 px-1">
+                {group.category.name}
+                <span className="ml-2 text-xs font-normal normal-case text-gray-400">
+                  ({group.items.reduce((sum, i) => sum + i.quantity, 0)} prendas)
+                </span>
+              </h2>
+              <div className="space-y-4">
+                {group.items.map(item => (
+                  <CartItemCard
+                    key={`${item.product.id}-${item.selectedSize || 'nosize'}`}
+                    item={item}
+                    onUpdateQuantity={updateQuantity}
+                    onRemove={removeFromCart}
+                  />
+                ))}
+              </div>
+            </div>
           ))}
+
+          {itemsWithoutCategory.length > 0 && (
+            <div>
+              <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500 mb-3 px-1">
+                Otros productos
+              </h2>
+              <div className="space-y-4">
+                {itemsWithoutCategory.map(item => (
+                  <CartItemCard
+                    key={`${item.product.id}-${item.selectedSize || 'nosize'}`}
+                    item={item}
+                    onUpdateQuantity={updateQuantity}
+                    onRemove={removeFromCart}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Order Summary */}
         <div className="mt-8 bg-white rounded-2xl shadow-lg p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-6">Resumen del pedido</h2>
-          
-          <div className="space-y-3 mb-6">
+
+          <div className="space-y-2 mb-6">
+            {groups.map(group => (
+              <div key={group.category.id} className="flex justify-between text-sm text-gray-500">
+                <span>{group.category.name} ({group.items.reduce((sum, i) => sum + i.quantity, 0)})</span>
+                <span>${group.items.reduce((sum, i) => sum + i.product.price * i.quantity, 0).toFixed(2)}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="space-y-3 mb-6 border-t pt-4">
             <div className="flex justify-between text-gray-600">
               <span>Subtotal</span>
               <span>${total.toFixed(2)}</span>
@@ -77,6 +143,10 @@ export default function Cart() {
               </div>
             </div>
           </div>
+
+          <p className="text-xs text-gray-400 mb-4">
+            Revisa talles y cantidades antes de confirmar. Podes editarlos con los botones + y - en cada producto.
+          </p>
 
           <a
             href={`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`}
@@ -102,6 +172,8 @@ function CartItemCard({
   onRemove: (id: string, selectedSize?: string) => void;
 }) {
   const { product, quantity, selectedSize } = item;
+  const stockForSize: number | undefined = selectedSize ? product.stockBySize?.[selectedSize] : undefined;
+  const reachedMax = typeof stockForSize === 'number' && quantity >= stockForSize;
 
   return (
     <div className="bg-white rounded-xl shadow-sm p-4 flex gap-4">
@@ -149,8 +221,9 @@ function CartItemCard({
             </button>
             <span className="font-semibold w-6 text-center">{quantity}</span>
             <button
-              onClick={() => onUpdateQuantity(product.id, quantity + 1, selectedSize)}
-              className="w-8 h-8 flex items-center justify-center hover:bg-white rounded transition-colors"
+              onClick={() => !reachedMax && onUpdateQuantity(product.id, quantity + 1, selectedSize)}
+              disabled={reachedMax}
+              className="w-8 h-8 flex items-center justify-center hover:bg-white rounded transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <Plus className="w-4 h-4" />
             </button>
