@@ -31,7 +31,7 @@ export default function Home() {
 
         {/* Imagen del banner con movimiento automático */}
         <div
-          className="absolute inset-0 bg-cover bg-center animate-banner-pan"
+          className="hero-banner-pan absolute inset-0 bg-center"
           style={{
             backgroundImage: `url(${heroBanner})`,
           }}
@@ -51,7 +51,7 @@ export default function Home() {
             <img
               src={logoCentaury}
               alt={storeName}
-              className="h-32 w-auto sm:h-44 lg:h-64 rounded-3xl object-contain p-4 shadow-2xl ring-1 ring-white/20"
+              className="h-16 w-auto sm:h-32 lg:h-64 rounded-3xl object-contain p-2 sm:p-4 shadow-2xl ring-1 ring-white/20"
               style={{
                 filter:
                   'drop-shadow(0 0 20px rgba(0,0,0,0.45)) brightness(0.95) contrast(1.05)',
@@ -68,14 +68,6 @@ export default function Home() {
             Prendas premium con tecnologia DTF, colores intensos y detalles
             creados para destacar.
           </p>
-
-          <Link
-            to="/catalog"
-            className="inline-flex items-center px-8 py-4 bg-white text-slate-900 font-bold rounded-xl hover:bg-red-50 transition-all duration-300 transform hover:scale-105 shadow-lg"
-          >
-            Ver Catalogo
-            <ChevronRight className="ml-2 w-5 h-5" />
-          </Link>
 
         </div>
       </section>
