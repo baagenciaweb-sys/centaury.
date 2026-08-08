@@ -37,10 +37,10 @@ export default function Home() {
       >
 
         {/* Capa oscura del banner */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-black/70" />
+     <div className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/20 to-black/35" />
 
         {/* Capa roja muy sutil */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-red-950/40" />
+     <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-red-950/25" />
 
         {/* Contenido */}
         <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
