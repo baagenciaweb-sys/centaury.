@@ -6,6 +6,7 @@ export interface Product {
   categoryId: string;
   imageUrl: string;
   sizes?: string[];
+  stockBySize?: { [size: string]: number };
   createdAt: Date;
   updatedAt: Date;
 }
