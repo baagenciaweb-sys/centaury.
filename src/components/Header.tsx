@@ -1,3 +1,4 @@
+tsx
 import { Link } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
 import { useState } from 'react';
