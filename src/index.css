@@ -129,9 +129,14 @@
 
     opacity: 0.9;
 
-    transform: translate3d(0, 0, 0);
+    transform:
+  translate3d(
+    calc(var(--scroll-y, 0px) * 0.025),
+    calc(var(--scroll-y, 0px) * 0.018),
+    0
+  );
 
-    animation: centauryRedFog 22s ease-in-out infinite alternate;
+animation: centauryRedFog 22s ease-in-out infinite alternate;
   }
 
   /*
