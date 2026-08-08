@@ -267,7 +267,7 @@ animation: centauryRedFog 22s ease-in-out infinite alternate;
   background-repeat: no-repeat;
   background-size: cover;
   transform: scale(1.08);
-  animation: heroBannerPanDesktop 30s ease-in-out infinite;
+  animation: heroBannerPanDesktop 18s ease-in-out infinite;
 }
 
 @keyframes heroBannerPanDesktop {
@@ -347,7 +347,7 @@ animation: centauryRedFog 22s ease-in-out infinite alternate;
 
   body {
     background-size: 180% 180%;
-    animation-duration: 40s;
+    animation-duration: 24s;
   }
 
   body::before {
