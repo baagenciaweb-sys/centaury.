@@ -296,5 +296,3 @@ function ProductDetail({
     </div>
   );
 }
-  );
-}
