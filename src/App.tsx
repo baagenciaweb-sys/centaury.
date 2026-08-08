@@ -97,18 +97,22 @@ function Layout({ children }: { children: React.ReactNode }) {
     return <>{children}</>;
   }
 
-  return (
-    <div
-      className="min-h-screen flex flex-col"
-      style={{ fontFamily: 'Manrope, sans-serif' }}
-    >
-      <main className="flex-1">
-        {children}
-      </main>
+ return (
+  <div
+    className="min-h-screen flex flex-col"
+    style={{ fontFamily: 'Manrope, sans-serif' }}
+  >
 
-      <Footer />
-    </div>
-  );
+    <Header />
+
+    <main className="flex-1">
+      {children}
+    </main>
+
+    <Footer />
+
+  </div>
+);
 }
 
 /* =========================================================
