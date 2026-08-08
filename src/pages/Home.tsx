@@ -27,14 +27,15 @@ export default function Home() {
           HERO BANNER
           ===================================================== */}
 
-      <section
-        className="relative min-h-[620px] flex items-center overflow-hidden"
-        style={{
-          backgroundImage: `url(${heroBanner})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      >
+     <section
+  className="relative min-h-[620px] flex items-center overflow-hidden"
+>
+  <div
+    className="absolute inset-0 bg-cover bg-center animate-banner-pan"
+    style={{
+      backgroundImage: `url(${heroBanner})`,
+    }}
+  />
 
         {/* Capa oscura del banner */}
      <div className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/20 to-black/35" />
