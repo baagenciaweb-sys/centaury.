@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
 import { useState } from 'react';
-import { ShoppingBag, ShoppingCart, Menu, X, User, Sparkles } from 'lucide-react';
+import { ShoppingBag, ShoppingCart, Menu, X, User } from 'lucide-react';
 
 export default function Header() {
   const { itemCount } = useCart();
@@ -15,55 +15,8 @@ export default function Header() {
     { label: 'Carrito', to: '/cart' },
   ];
 
-  // Mensajes que aparecerán en el banner (se duplican internamente para el bucle infinito)
-  const bannerMessages = [
-    '🚀 ENVÍOS A TODO EL PAÍS',
-  
-  ];
-
   return (
     <div className="w-full">
-      {/* Estilos CSS inyectados para la animación en bucle continuo */}
-      <style>{`
-        @keyframes marquee {
-          0% { transform: translateX(0%); }
-          100% { transform: translateX(-50%); }
-        }
-        .animate-marquee {
-          display: flex;
-          width: max-content;
-          animation: marquee 25s linear infinite;
-        }
-        .animate-marquee:hover {
-          animation-play-state: paused;
-        }
-      `}</style>
-
-      {/* BANNER SCROLL EN BUCLE */}
-      <div className="relative z-50 w-full overflow-hidden border-b border-rose-500/20 bg-black/80 py-2.5 backdrop-blur-md">
-        <div className="animate-marquee flex items-center gap-12 text-xs font-semibold uppercase tracking-widest text-slate-300">
-          {/* Primer grupo de mensajes */}
-          <div className="flex items-center gap-12">
-            {bannerMessages.map((msg, index) => (
-              <span key={`b1-${index}`} className="flex items-center gap-3 whitespace-nowrap">
-                <Sparkles className="h-3.5 w-3.5 text-rose-400" />
-                <span>{msg}</span>
-              </span>
-            ))}
-          </div>
-
-          {/* Segundo grupo duplicado (indispensable para el bucle perfecto) */}
-          <div className="flex items-center gap-12">
-            {bannerMessages.map((msg, index) => (
-              <span key={`b2-${index}`} className="flex items-center gap-3 whitespace-nowrap">
-                <Sparkles className="h-3.5 w-3.5 text-rose-400" />
-                <span>{msg}</span>
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-
       {/* HEADER DE LA PÁGINA */}
       <header className="sticky top-4 z-40 px-3 pt-3 sm:px-4 lg:px-6">
         <div className="relative mx-auto flex max-w-7xl items-center justify-between rounded-[30px] border border-white/10 px-3 py-2.5 shadow-[0_0_0_1px_rgba(255,255,255,0.03),0_20px_70px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-2xl sm:px-4 lg:px-5">
@@ -112,8 +65,7 @@ export default function Header() {
               )}
             </Link>
 
-            
-              <a href="/admin/login"
+            <a href="/admin/login"
               className="group hidden items-center gap-2 overflow-hidden rounded-full border border-white/10 bg-black/30 px-3.5 py-2 text-sm font-medium text-slate-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-all duration-500 hover:-translate-y-0.5 hover:border-rose-400/50 hover:text-white hover:shadow-[0_0_20px_rgba(170,40,40,0.16),inset_0_0_18px_rgba(180,60,60,0.08)] active:scale-[0.97] md:flex"
             >
               <span className="absolute inset-0 scale-0 rounded-full bg-[radial-gradient(circle,rgba(190,60,60,0.35),rgba(190,60,60,0.05)_55%,transparent_80%)] transition-transform duration-500 group-hover:scale-150" />
@@ -144,8 +96,7 @@ export default function Header() {
                   {item.label}
                 </Link>
               ))}
-              
-                <a href="/admin/login"
+              <a href="/admin/login"
                 className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2.5 text-sm font-medium text-slate-200 transition-all duration-300 hover:border-rose-400/40 hover:bg-rose-500/10 hover:text-white"
               >
                 <User className="h-4 w-4" />
