@@ -267,74 +267,30 @@ animation: centauryRedFog 22s ease-in-out infinite alternate;
   background-repeat: no-repeat;
   background-size: cover;
   transform: scale(1.08);
-  animation: heroBannerPanDesktop 18s ease-in-out infinite;
-  will-change: transform;
+  animation: heroBannerPanDesktop 30s ease-in-out infinite;
 }
 
 @keyframes heroBannerPanDesktop {
-  0% {
-    transform: scale(1.08) translateX(0%);
-  }
-
-  50% {
-    transform: scale(1.08) translateX(-3%);
-  }
-
-  100% {
-    transform: scale(1.08) translateX(0%);
-  }
+  0% { transform: scale(1.08) translateX(0%); }
+  50% { transform: scale(1.08) translateX(-3%); }
+  100% { transform: scale(1.08) translateX(0%); }
 }
 
-/* =========================================================
-   HERO BANNER - MOBILE
-   ========================================================= */
-
+/* En mobile: paneo de punta a punta, ida y vuelta, infinito */
 @media (max-width: 768px) {
   .hero-banner-pan {
     background-size: 260% 100%;
     background-position: 0% 50%;
     transform: none;
-    animation: heroBannerPanMobile 18s ease-in-out infinite;
-    will-change: background-position;
+    animation: heroBannerPanMobile 9s ease-in-out infinite;
   }
 
   @keyframes heroBannerPanMobile {
-    0% {
-      background-position: 0% 50%;
-    }
-
-    50% {
-      background-position: 100% 50%;
-    }
-
-    100% {
-      background-position: 0% 50%;
-    }
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
   }
 }
-¿Qué cambia?
-
-Antes:
-
-9 segundos → izquierda → derecha → izquierda
-
-Ahora:
-
-18 segundos → izquierda → derecha → izquierda
-
-Por lo tanto, el movimiento va a ser aproximadamente el doble de lento y mucho menos brusco.
-
-Además, ease-in-out hace que:
-
-🐢 Empiece lentamente
-➡️ Tome velocidad suavemente
-🐢 Frene antes de llegar al extremo
-🔄 Vuelva sin un cambio brusco
-Si lo querés todavía más cinematográfico
-
-Podemos llevarlo a 25–30 segundos, con un paneo casi imperceptible, que para una tienda de ropa puede quedar mucho más premium.
-
-Yo probaría primero los 18 segundos. No tocaría nada más de tu página hasta ver cómo queda en el celular.
 
 /* =========================================================
    PANEL ADMIN - ESTILO NEON CYBER
@@ -391,7 +347,7 @@ Yo probaría primero los 18 segundos. No tocaría nada más de tu página hasta 
 
   body {
     background-size: 180% 180%;
-    animation-duration: 24s;
+    animation-duration: 40s;
   }
 
   body::before {
