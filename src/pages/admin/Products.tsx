@@ -21,21 +21,34 @@ export default function Products() {
     imageUrl: ''
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
+  const [stockBySize, setStockBySize] = useState<{ [size: string]: string }>({});
 
-  const toggleSize = (size: string) => {
-    setSelectedSizes(prev =>
-      prev.includes(size) ? prev.filter(s => s !== size) : [...prev, size]
-    );
+  const setSizeStock = (size: string, quantity: string) => {
+    setStockBySize(prev => {
+      const next = { ...prev };
+      if (quantity === '') {
+        delete next[size];
+      } else {
+        next[size] = quantity;
+      }
+      return next;
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     let imageUrl = formData.imageUrl;
     if (imageFile) {
       imageUrl = await uploadFile(imageFile, 'products');
     }
+
+    const stockEntries = Object.entries(stockBySize)
+      .map(([size, qty]) => [size, parseInt(qty, 10) || 0] as [string, number])
+      .filter(([, qty]) => qty > 0);
+
+    const stockBySizeData = Object.fromEntries(stockEntries);
+    const sizesData = stockEntries.map(([size]) => size);
 
     const productData = {
       name: formData.name,
@@ -43,7 +56,8 @@ export default function Products() {
       price: parseFloat(formData.price),
       categoryId: formData.categoryId,
       imageUrl,
-      sizes: selectedSizes,
+      sizes: sizesData,
+      stockBySize: stockBySizeData,
       createdAt: new Date()
     };
 
@@ -65,7 +79,12 @@ export default function Products() {
       categoryId: product.categoryId,
       imageUrl: product.imageUrl
     });
-    setSelectedSizes(product.sizes || []);
+    const existingStock = product.stockBySize || {};
+    const stockAsStrings: { [size: string]: string } = {};
+    Object.entries(existingStock).forEach(([size, qty]) => {
+      stockAsStrings[size] = String(qty);
+    });
+    setStockBySize(stockAsStrings);
     setShowForm(true);
   };
 
@@ -80,7 +99,7 @@ export default function Products() {
     setEditingProduct(null);
     setFormData({ name: '', description: '', price: '', categoryId: '', imageUrl: '' });
     setImageFile(null);
-    setSelectedSizes([]);
+    setStockBySize({});
   };
 
   return (
@@ -165,11 +184,21 @@ export default function Products() {
                         <td className="py-4 px-6">
                           {product.sizes && product.sizes.length > 0 ? (
                             <div className="flex flex-wrap gap-1">
-                              {product.sizes.map(size => (
-                                <span key={size} className="inline-block bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-xs font-medium">
-                                  {size}
-                                </span>
-                              ))}
+                              {product.sizes.map(size => {
+                                const stock = product.stockBySize?.[size] ?? 0;
+                                return (
+                                  <span
+                                    key={size}
+                                    className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${
+                                      stock > 0
+                                        ? 'bg-gray-100 text-gray-700'
+                                        : 'bg-red-50 text-red-500'
+                                    }`}
+                                  >
+                                    {size}: {stock}
+                                  </span>
+                                );
+                              })}
                             </div>
                           ) : (
                             <span className="text-sm text-gray-400">Sin talles</span>
@@ -279,29 +308,27 @@ export default function Products() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Talles disponibles
+                  Stock por talle
                 </label>
-                <div className="flex flex-wrap gap-2">
-                  {AVAILABLE_SIZES.map(size => {
-                    const isSelected = selectedSizes.includes(size);
-                    return (
-                      <button
-                        key={size}
-                        type="button"
-                        onClick={() => toggleSize(size)}
-                        className={`px-4 py-2 rounded-lg font-medium text-sm border transition-colors ${
-                          isSelected
-                            ? 'bg-slate-800 text-white border-slate-800'
-                            : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
-                        }`}
-                      >
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {AVAILABLE_SIZES.map(size => (
+                    <div key={size} className="flex items-center gap-2">
+                      <span className="w-10 shrink-0 text-sm font-semibold text-gray-700">
                         {size}
-                      </button>
-                    );
-                  })}
+                      </span>
+                      <input
+                        type="number"
+                        min="0"
+                        placeholder="0"
+                        value={stockBySize[size] ?? ''}
+                        onChange={(e) => setSizeStock(size, e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-slate-800 focus:border-transparent"
+                      />
+                    </div>
+                  ))}
                 </div>
                 <p className="text-xs text-gray-400 mt-2">
-                  Si no seleccionas ningun talle, el producto se vende sin opcion de talle.
+                  Dejá en blanco o en 0 los talles que no tengas en stock. Si no cargás cantidad en ningun talle, el producto se vende sin opcion de talle.
                 </p>
               </div>
 
