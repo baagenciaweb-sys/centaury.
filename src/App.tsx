@@ -24,6 +24,53 @@ import Categories from './pages/admin/Categories';
 
 import IntroLoader from './components/IntroLoader';
 
+/* =========================================================
+   SCROLL SUAVE PARA EL FONDO
+   ========================================================= */
+
+function ScrollBackground() {
+  useEffect(() => {
+    let animationFrame = 0;
+
+    const updateBackground = () => {
+      const scrollY = window.scrollY;
+
+      document.documentElement.style.setProperty(
+        '--scroll-y',
+        `${scrollY}px`
+      );
+
+      animationFrame = 0;
+    };
+
+    const handleScroll = () => {
+      if (!animationFrame) {
+        animationFrame = requestAnimationFrame(updateBackground);
+      }
+    };
+
+    updateBackground();
+
+    window.addEventListener('scroll', handleScroll, {
+      passive: true,
+    });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+      }
+    };
+  }, []);
+
+  return null;
+}
+
+/* =========================================================
+   VOLVER ARRIBA AL CAMBIAR DE PÁGINA
+   ========================================================= */
+
 function ScrollToTop() {
   const location = useLocation();
 
@@ -38,6 +85,10 @@ function ScrollToTop() {
   return null;
 }
 
+/* =========================================================
+   LAYOUT
+   ========================================================= */
+
 function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
   const isAdminPage = location.pathname.startsWith('/admin');
@@ -51,8 +102,6 @@ function Layout({ children }: { children: React.ReactNode }) {
       className="min-h-screen flex flex-col"
       style={{ fontFamily: 'Manrope, sans-serif' }}
     >
-      <Header />
-
       <main className="flex-1">
         {children}
       </main>
@@ -62,19 +111,29 @@ function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
+/* =========================================================
+   APP
+   ========================================================= */
+
 function App() {
   return (
     <>
-      {/* NUEVO INTRO */}
-      <IntroLoader />
-
       <AuthProvider>
         <CartProvider>
           <Router>
+
+            {/* Controla el movimiento del fondo con el scroll */}
+            <ScrollBackground />
+
+            {/* Mantiene el comportamiento actual de navegación */}
             <ScrollToTop />
 
             <Routes>
-              {/* Páginas públicas */}
+
+              {/* =========================
+                  PÁGINAS PÚBLICAS
+                  ========================= */}
+
               <Route
                 path="/"
                 element={
@@ -111,7 +170,10 @@ function App() {
                 }
               />
 
-              {/* Panel de administración */}
+              {/* =========================
+                  PANEL DE ADMINISTRACIÓN
+                  ========================= */}
+
               <Route
                 path="/admin/login"
                 element={<Login />}
@@ -131,7 +193,9 @@ function App() {
                 path="/admin/categories"
                 element={<Categories />}
               />
+
             </Routes>
+
           </Router>
         </CartProvider>
       </AuthProvider>
