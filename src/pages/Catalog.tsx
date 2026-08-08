@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useCollection } from '../hooks/useFirestore';
 import { useCart } from '../contexts/CartContext';
 import { Category, Product } from '../types';
@@ -26,7 +27,7 @@ export default function Catalog() {
   const selectedProduct = productId ? products.find(p => p.id === productId) : null;
 
   if (selectedProduct) {
-    return <ProductDetail product={selectedProduct} categories={categories} />;
+    return <ProductDetail product={selectedProduct} categories={categories} categoryId={categoryId} />;
   }
 
   return (
@@ -89,7 +90,7 @@ export default function Catalog() {
             <p className="text-gray-500 text-lg">No se encontraron productos</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" style={{ perspective: 1200 }}>
             {filteredProducts.map(product => (
               <ProductCard
                 key={product.id}
@@ -115,9 +116,41 @@ function ProductCard({
   onAddToCart: () => void;
 }) {
   const category = categories.find(c => c.id === product.categoryId);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  // --- Tilt 3D al mouse ---
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const springConfig = { stiffness: 150, damping: 20 };
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [10, -10]), springConfig);
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-10, 10]), springConfig);
+  const scale = useSpring(1, springConfig);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = cardRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    mouseX.set(x);
+    mouseY.set(y);
+  };
+
+  const handleMouseEnter = () => scale.set(1.04);
+  const handleMouseLeave = () => {
+    mouseX.set(0);
+    mouseY.set(0);
+    scale.set(1);
+  };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden group">
+    <motion.div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      style={{ rotateX, rotateY, scale, transformStyle: 'preserve-3d' }}
+      className="bg-white rounded-xl shadow-sm hover:shadow-2xl transition-shadow duration-300 overflow-hidden group"
+    >
       <Link to={`/catalog?product=${product.id}`}>
         <div className="aspect-square bg-gray-100 overflow-hidden relative">
           {product.imageUrl ? (
@@ -139,7 +172,7 @@ function ProductCard({
         </div>
       </Link>
       
-      <div className="p-4">
+      <div className="p-4" style={{ transform: 'translateZ(20px)' }}>
         <Link to={`/catalog?product=${product.id}`}>
           <h3 className="font-semibold text-gray-900 mb-1 line-clamp-1 hover:text-slate-700">
             {product.name}
@@ -164,11 +197,19 @@ function ProductCard({
           </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
-function ProductDetail({ product, categories }: { product: Product; categories: Category[] }) {
+function ProductDetail({ 
+  product, 
+  categories,
+  categoryId,
+}: { 
+  product: Product; 
+  categories: Category[];
+  categoryId: string | null;
+}) {
   const category = categories.find(c => c.id === product.categoryId);
   const { addToCart, items, updateQuantity } = useCart();
   const cartItem = items.find(item => item.product.id === product.id);
@@ -253,5 +294,7 @@ function ProductDetail({ product, categories }: { product: Product; categories: 
         </div>
       </div>
     </div>
+  );
+}
   );
 }
