@@ -5,22 +5,21 @@ export interface Product {
   price: number;
   categoryId: string;
   imageUrl: string;
+  sizes?: string[];
   createdAt: Date;
   updatedAt: Date;
 }
-
 export interface Category {
   id: string;
   name: string;
   description?: string;
   createdAt: Date;
 }
-
 export interface CartItem {
   product: Product;
   quantity: number;
+  selectedSize?: string;
 }
-
 export interface User {
   uid: string;
   email: string | null;
