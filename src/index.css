@@ -260,6 +260,70 @@ animation: centauryRedFog 22s ease-in-out infinite alternate;
 }
 
 /* =========================================================
+   HERO BANNER - MOVIMIENTO AUTOMATICO
+   ========================================================= */
+
+.hero-banner-pan {
+  background-repeat: no-repeat;
+  background-size: cover;
+  transform: scale(1.08);
+  animation: heroBannerPanDesktop 18s ease-in-out infinite;
+}
+
+@keyframes heroBannerPanDesktop {
+  0% { transform: scale(1.08) translateX(0%); }
+  50% { transform: scale(1.08) translateX(-3%); }
+  100% { transform: scale(1.08) translateX(0%); }
+}
+
+/* En mobile: paneo de punta a punta, ida y vuelta, infinito */
+@media (max-width: 768px) {
+  .hero-banner-pan {
+    background-size: 260% 100%;
+    background-position: 0% 50%;
+    transform: none;
+    animation: heroBannerPanMobile 9s ease-in-out infinite;
+  }
+
+  @keyframes heroBannerPanMobile {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+}
+
+/* =========================================================
+   PANEL ADMIN - ESTILO NEON CYBER
+   ========================================================= */
+
+.admin-neon-container {
+  position: relative;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(20px);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.03),
+    0 20px 60px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.admin-neon-glow-top {
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.admin-neon-glow-top::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top left, rgba(185, 90, 80, 0.22), transparent 40%);
+}
+
+/* =========================================================
    REDUCCIÓN DE MOVIMIENTO
    ========================================================= */
 
