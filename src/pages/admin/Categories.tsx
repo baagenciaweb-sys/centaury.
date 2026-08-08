@@ -61,20 +61,20 @@ export default function Categories() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm border-b">
+    <div className="min-h-screen">
+      <header className="sticky top-0 z-30 border-b border-white/10 bg-black/60 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-4">
-              <Link to="/admin" className="text-slate-600 hover:text-slate-900">
+              <Link to="/admin" className="text-slate-300 hover:text-white">
                 Dashboard
               </Link>
-              <span className="text-gray-400">/</span>
-              <h1 className="text-xl font-bold text-gray-900">Categorias</h1>
+              <span className="text-slate-600">/</span>
+              <h1 className="text-xl font-bold text-white">Categorias</h1>
             </div>
             <button
               onClick={() => setShowForm(true)}
-              className="flex items-center gap-2 bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+              className="flex items-center justify-center gap-2 bg-rose-600 hover:bg-rose-500 text-white px-5 py-3.5 sm:px-4 sm:py-2 rounded-xl sm:rounded-lg font-semibold sm:font-medium text-base sm:text-sm transition-colors shadow-[0_0_20px_rgba(190,40,40,0.3)]"
             >
               <Plus className="w-5 h-5" />
               Nueva Categoria
@@ -86,15 +86,16 @@ export default function Categories() {
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {loading ? (
           <div className="text-center py-16">
-            <div className="animate-spin w-8 h-8 border-4 border-slate-800 border-t-transparent rounded-full mx-auto"></div>
+            <div className="animate-spin w-8 h-8 border-4 border-rose-500 border-t-transparent rounded-full mx-auto"></div>
           </div>
         ) : categories.length === 0 ? (
-          <div className="text-center py-16 bg-white rounded-xl shadow-sm">
-            <FolderPlus className="w-20 h-20 mx-auto text-gray-300 mb-4" />
-            <p className="text-gray-500 text-lg mb-4">No hay categorias</p>
+          <div className="admin-neon-container text-center py-16">
+            <div className="admin-neon-glow-top" />
+            <FolderPlus className="relative w-20 h-20 mx-auto text-slate-600 mb-4" />
+            <p className="relative text-slate-400 text-lg mb-4">No hay categorias</p>
             <button
               onClick={() => setShowForm(true)}
-              className="text-slate-700 hover:text-slate-900 font-medium"
+              className="relative text-rose-300 hover:text-rose-200 font-medium"
             >
               Agregar la primera categoria
             </button>
@@ -104,36 +105,37 @@ export default function Categories() {
             {categories.map(category => (
               <div
                 key={category.id}
-                className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow"
+                className="admin-neon-container p-5 sm:p-6 transition-all duration-300 hover:border-rose-400/30 hover:shadow-[0_0_24px_rgba(190,40,40,0.14)]"
               >
-                <div className="flex items-center justify-between">
+                <div className="admin-neon-glow-top" />
+                <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center">
-                      <FolderPlus className="w-6 h-6 text-slate-600" />
+                    <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-black/40 border border-rose-500/20 flex-shrink-0">
+                      <FolderPlus className="w-6 h-6 text-rose-300" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900">{category.name}</h3>
+                      <h3 className="font-semibold text-white">{category.name}</h3>
                       {category.description && (
-                        <p className="text-sm text-gray-500">{category.description}</p>
+                        <p className="text-sm text-slate-400">{category.description}</p>
                       )}
                     </div>
                   </div>
                   
-                  <div className="flex items-center gap-6">
-                    <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <div className="flex items-center justify-between gap-6 sm:justify-end">
+                    <div className="flex items-center gap-2 text-sm text-slate-400">
                       <Package className="w-4 h-4" />
                       <span>{getProductCount(category.id)} productos</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => handleEdit(category)}
-                        className="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors"
+                        className="p-3 sm:p-2 text-slate-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
                       >
                         <Edit className="w-5 h-5" />
                       </button>
                       <button
                         onClick={() => handleDelete(category)}
-                        className="p-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
+                        className="p-3 sm:p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors"
                       >
                         <Trash2 className="w-5 h-5" />
                       </button>
@@ -148,20 +150,21 @@ export default function Categories() {
 
       {/* Form Modal */}
       {showForm && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl max-w-md w-full">
-            <div className="flex items-center justify-between p-6 border-b">
-              <h2 className="text-xl font-bold text-gray-900">
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="admin-neon-container max-w-md w-full">
+            <div className="admin-neon-glow-top" />
+            <div className="relative flex items-center justify-between p-6 border-b border-white/10">
+              <h2 className="text-xl font-bold text-white">
                 {editingCategory ? 'Editar Categoria' : 'Nueva Categoria'}
               </h2>
-              <button onClick={resetForm} className="p-2 hover:bg-gray-100 rounded-lg">
+              <button onClick={resetForm} className="p-2 hover:bg-white/10 rounded-lg text-slate-300">
                 <X className="w-5 h-5" />
               </button>
             </div>
             
-            <form onSubmit={handleSubmit} className="p-6 space-y-6">
+            <form onSubmit={handleSubmit} className="relative p-6 space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-slate-300 mb-2">
                   Nombre de la categoria *
                 </label>
                 <input
@@ -169,20 +172,20 @@ export default function Categories() {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-800 focus:border-transparent"
+                  className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-lg text-white placeholder:text-slate-500 focus:ring-2 focus:ring-rose-500/50 focus:border-rose-400/50 focus:outline-none"
                   placeholder="Ej: Ropa, Electronica, Hogar..."
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-slate-300 mb-2">
                   Descripcion
                 </label>
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   rows={3}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-800 focus:border-transparent"
+                  className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-lg text-white placeholder:text-slate-500 focus:ring-2 focus:ring-rose-500/50 focus:border-rose-400/50 focus:outline-none"
                   placeholder="Descripcion opcional de la categoria..."
                 />
               </div>
@@ -191,13 +194,13 @@ export default function Categories() {
                 <button
                   type="button"
                   onClick={resetForm}
-                  className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+                  className="flex-1 px-4 py-3 border border-white/10 text-slate-300 rounded-lg font-medium hover:bg-white/5 transition-colors"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-3 bg-slate-800 hover:bg-slate-900 text-white rounded-lg font-medium transition-colors"
+                  className="flex-1 px-4 py-3 bg-rose-600 hover:bg-rose-500 text-white rounded-lg font-medium transition-colors shadow-[0_0_20px_rgba(190,40,40,0.3)]"
                 >
                   Guardar
                 </button>
