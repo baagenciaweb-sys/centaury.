@@ -126,6 +126,9 @@ function App() {
         <CartProvider>
           <Router>
 
+            {/* Pantalla de pre-inicio (se muestra una vez por sesión) */}
+            <IntroLoader />
+
             {/* Controla el movimiento del fondo con el scroll */}
             <ScrollBackground />
 
