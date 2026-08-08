@@ -21,27 +21,27 @@ export default function Home() {
   const featuredProducts = products.slice(0, 4);
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <div className="relative min-h-screen">
 
       {/* =====================================================
           HERO BANNER
           ===================================================== */}
 
-     <section
-  className="relative min-h-[620px] flex items-center overflow-hidden"
->
-  <div
-    className="absolute inset-0 bg-cover bg-center animate-banner-pan"
-    style={{
-      backgroundImage: `url(${heroBanner})`,
-    }}
-  />
+      <section className="relative min-h-[620px] flex items-center overflow-hidden">
 
-        {/* Capa oscura del banner */}
-     <div className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/20 to-black/35" />
+        {/* Imagen del banner con movimiento automático */}
+        <div
+          className="absolute inset-0 bg-cover bg-center animate-banner-pan"
+          style={{
+            backgroundImage: `url(${heroBanner})`,
+          }}
+        />
+
+        {/* Capa oscura del banner - suave para no ocultar la imagen */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/20 to-black/35" />
 
         {/* Capa roja muy sutil */}
-     <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-red-950/25" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-red-950/25" />
 
         {/* Contenido */}
         <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
@@ -74,7 +74,6 @@ export default function Home() {
             className="inline-flex items-center px-8 py-4 bg-white text-slate-900 font-bold rounded-xl hover:bg-red-50 transition-all duration-300 transform hover:scale-105 shadow-lg"
           >
             Ver Catalogo
-
             <ChevronRight className="ml-2 w-5 h-5" />
           </Link>
 
@@ -246,17 +245,13 @@ export default function Home() {
                 </div>
 
                 <h3 className="text-lg sm:text-xl font-semibold text-white">
-
                   {category.name}
-
                 </h3>
 
                 {category.description && (
 
                   <p className="text-sm text-gray-400 mt-2 line-clamp-2">
-
                     {category.description}
-
                   </p>
 
                 )}
@@ -298,7 +293,6 @@ export default function Home() {
               Ver todos
 
               <ChevronRight className="w-5 h-5 ml-1" />
-
             </Link>
 
           </div>
@@ -418,37 +412,27 @@ function ProductCard({
         {category && (
 
           <p className="text-xs uppercase tracking-wider text-red-300 mb-2">
-
             {category.name}
-
           </p>
 
         )}
 
         <h3 className="text-lg font-semibold text-white mb-2">
-
           {product.name}
-
         </h3>
 
         <p className="text-sm text-gray-400 line-clamp-2 mb-4">
-
           {product.description}
-
         </p>
 
         <div className="flex items-center justify-between">
 
           <span className="text-xl font-bold text-white">
-
             ${product.price.toFixed(2)}
-
           </span>
 
           <span className="text-sm text-red-300 group-hover:text-red-200 transition-colors">
-
             Ver producto
-
           </span>
 
         </div>
@@ -458,4 +442,5 @@ function ProductCard({
     </Link>
 
   );
+}
 }
