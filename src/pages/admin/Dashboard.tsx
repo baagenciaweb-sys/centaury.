@@ -20,17 +20,17 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm border-b border-gray-200">
+    <div className="min-h-screen">
+      <header className="sticky top-0 z-30 border-b border-white/10 bg-black/60 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex flex-wrap items-center justify-between gap-3 py-3 sm:h-16 sm:py-0">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-slate-800 rounded-xl flex items-center justify-center">
-                <ShoppingBag className="w-5 h-5 text-white" />
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-black/40 border border-rose-500/30 shadow-[0_0_18px_rgba(190,40,40,0.35)]">
+                <ShoppingBag className="w-5 h-5 text-rose-300" />
               </div>
               <div>
-                <h1 className="font-bold text-gray-900">{storeName}</h1>
-                <p className="text-xs text-gray-500">Panel de Administracion</p>
+                <h1 className="font-bold text-white">{storeName}</h1>
+                <p className="text-xs text-slate-400">Panel de Administracion</p>
               </div>
             </div>
             
@@ -39,16 +39,16 @@ export default function Dashboard() {
                 href="/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-sm text-slate-600 hover:text-slate-900"
+                className="flex items-center gap-2 text-sm text-slate-300 hover:text-white"
               >
                 Ver tienda
                 <ExternalLink className="w-4 h-4" />
               </a>
               <div className="flex items-center gap-3">
-                <span className="text-sm text-gray-700">{currentUser?.email}</span>
+                <span className="hidden sm:inline text-sm text-slate-400">{currentUser?.email}</span>
                 <button
                   onClick={handleLogout}
-                  className="flex items-center gap-2 text-sm text-red-600 hover:text-red-700 font-medium"
+                  className="flex items-center gap-2 text-sm text-rose-400 hover:text-rose-300 font-medium"
                 >
                   <LogOut className="w-4 h-4" />
                   Salir
@@ -60,7 +60,7 @@ export default function Dashboard() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8">
           <StatCard title="Productos" value={products.length} icon={<Package className="w-6 h-6" />} />
           <StatCard title="Categorias" value={categories.length} icon={<FolderPlus className="w-6 h-6" />} />
           <StatCard 
@@ -70,7 +70,7 @@ export default function Dashboard() {
           />
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
           <ActionCard
             title="Gestionar Productos"
             description="Agrega, edita o elimina productos"
@@ -93,14 +93,15 @@ export default function Dashboard() {
 
 function StatCard({ title, value, icon }: { title: string; value: string | number; icon: React.ReactNode }) {
   return (
-    <div className="bg-white rounded-xl shadow-sm p-6">
-      <div className="flex items-center gap-3 mb-2">
-        <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center text-slate-600">
+    <div className="admin-neon-container p-6">
+      <div className="admin-neon-glow-top" />
+      <div className="relative flex items-center gap-3 mb-2">
+        <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-black/40 border border-rose-500/20 text-rose-300">
           {icon}
         </div>
       </div>
-      <h3 className="text-2xl font-bold text-gray-900">{value}</h3>
-      <p className="text-gray-500 text-sm">{title}</p>
+      <h3 className="relative text-2xl font-bold text-white">{value}</h3>
+      <p className="relative text-slate-400 text-sm">{title}</p>
     </div>
   );
 }
@@ -113,20 +114,22 @@ function ActionCard({ title, description, icon, link, count }: {
   count: number;
 }) {
   return (
-    <Link to={link} className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow">
-      <div className="flex items-start gap-4">
-        <div className="w-14 h-14 bg-slate-100 rounded-xl flex items-center justify-center text-slate-600 flex-shrink-0">
-          {icon}
+    <Link
+      to={link}
+      className="admin-neon-container group flex items-center gap-4 p-6 sm:p-8 transition-all duration-300 hover:-translate-y-0.5 hover:border-rose-400/40 hover:shadow-[0_0_30px_rgba(190,40,40,0.18)] active:scale-[0.98]"
+    >
+      <div className="admin-neon-glow-top" />
+      <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center bg-black/40 border border-rose-500/20 text-rose-300 flex-shrink-0 shadow-[0_0_18px_rgba(190,40,40,0.15)] group-hover:shadow-[0_0_26px_rgba(190,40,40,0.3)] transition-shadow">
+        {icon}
+      </div>
+      <div className="relative flex-1">
+        <div className="flex items-center gap-2 mb-1">
+          <h3 className="font-bold text-lg text-white">{title}</h3>
+          <span className="text-xs font-medium text-rose-300 bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 rounded-full">
+            {count}
+          </span>
         </div>
-        <div className="flex-1">
-          <div className="flex items-center gap-2 mb-1">
-            <h3 className="font-semibold text-gray-900">{title}</h3>
-            <span className="text-xs font-medium text-slate-600 bg-slate-100 px-2 py-0.5 rounded-full">
-              {count}
-            </span>
-          </div>
-          <p className="text-sm text-gray-500">{description}</p>
-        </div>
+        <p className="text-sm text-slate-400">{description}</p>
       </div>
     </Link>
   );
