@@ -28,12 +28,20 @@ export function useCollection<T extends { id?: string }>(path: string) {
     try {
       setLoading(true);
       const ref = getCollection<T>(path);
-      const q = query(ref, orderBy('createdAt', 'desc'));
-      const snapshot = await getDocs(q);
+      // No usamos orderBy en el servidor: Firestore excluye silenciosamente
+      // cualquier documento que no tenga el campo 'createdAt', lo que hacia
+      // "desaparecer" categorias/productos creados sin ese campo.
+      const snapshot = await getDocs(ref);
       const items = snapshot.docs.map(doc => ({
         ...doc.data(),
         id: doc.id
       } as T));
+      // Ordenamos en el cliente, tratando los que no tienen createdAt como los mas viejos
+      items.sort((a: any, b: any) => {
+        const aTime = a.createdAt?.toDate ? a.createdAt.toDate().getTime() : (a.createdAt ? new Date(a.createdAt).getTime() : 0);
+        const bTime = b.createdAt?.toDate ? b.createdAt.toDate().getTime() : (b.createdAt ? new Date(b.createdAt).getTime() : 0);
+        return bTime - aTime;
+      });
       setData(items);
       setError(null);
     } catch (err) {
