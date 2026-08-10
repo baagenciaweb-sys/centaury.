@@ -5,7 +5,7 @@ import { CartItem, Product } from '../types';
 
 interface CartContextType {
   items: CartItem[];
-  addToCart: (product: Product, selectedSize?: string) => void;
+  addToCart: (product: Product, selectedSize?: string, quantity?: number) => void;
   removeFromCart: (productId: string, selectedSize?: string) => void;
   updateQuantity: (productId: string, quantity: number, selectedSize?: string) => void;
   clearCart: () => void;
@@ -46,17 +46,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('cart', JSON.stringify(items));
   }, [items]);
 
-  const addToCart = (product: Product, selectedSize?: string) => {
+  const addToCart = (product: Product, selectedSize?: string, quantity: number = 1) => {
     setItems(prev => {
       const existing = prev.find(item => isSameCartLine(item, product.id, selectedSize));
       if (existing) {
         return prev.map(item =>
           isSameCartLine(item, product.id, selectedSize)
-            ? { ...item, quantity: item.quantity + 1 }
+            ? { ...item, quantity: item.quantity + quantity }
             : item
         );
       }
-      return [...prev, { product, quantity: 1, selectedSize }];
+      return [...prev, { product, quantity, selectedSize }];
     });
   };
 
@@ -122,8 +122,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
         <AnimatePresence>
           {flyingItems.map(item => {
             const endRect = cartIconRef.current?.getBoundingClientRect();
-            const endTop = endRect ? endRect.top + endRect.height / 2 - 14 : item.startRect.top;
-            const endLeft = endRect ? endRect.left + endRect.width / 2 - 14 : item.startRect.left;
+            const endTop = endRect ? endRect.top + endRect.height / 2 - 16 : item.startRect.top;
+            const endLeft = endRect ? endRect.left + endRect.width / 2 - 16 : item.startRect.left;
+
+            // Punto intermedio para que el vuelo dibuje un pequeño arco hacia arriba
+            const midTop = Math.min(item.startRect.top, endTop) - 110;
+            const midLeft = (item.startRect.left + endLeft) / 2;
+
             return (
               <motion.div
                 key={item.id}
@@ -131,26 +136,29 @@ export function CartProvider({ children }: { children: ReactNode }) {
                   position: 'fixed',
                   zIndex: 9999,
                   pointerEvents: 'none',
-                  borderRadius: '9999px',
                   overflow: 'hidden',
-                  boxShadow: '0 0 20px rgba(190,40,40,0.5)',
+                  boxShadow: '0 0 25px rgba(190,40,40,0.55)',
                 }}
                 initial={{
                   top: item.startRect.top,
                   left: item.startRect.left,
                   width: item.startRect.width,
                   height: item.startRect.height,
+                  borderRadius: 16,
                   opacity: 1,
+                  scale: 1,
                 }}
                 animate={{
-                  top: endTop,
-                  left: endLeft,
-                  width: 28,
-                  height: 28,
-                  opacity: 0.5,
+                  top: [item.startRect.top, midTop, endTop],
+                  left: [item.startRect.left, midLeft, endLeft],
+                  width: [item.startRect.width, item.startRect.width * 0.55, 32],
+                  height: [item.startRect.height, item.startRect.height * 0.55, 32],
+                  borderRadius: [16, 16, 9999],
+                  opacity: [1, 1, 0.9, 0],
+                  scale: [1, 1, 0.9],
                 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.75, ease: [0.2, 0.65, 0.3, 1] }}
+                transition={{ duration: 1.9, ease: [0.33, 0.05, 0.2, 1], times: [0, 0.55, 1] }}
                 onAnimationComplete={() => removeFlyingItem(item.id)}
               >
                 {item.imageUrl ? (
