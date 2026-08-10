@@ -18,7 +18,7 @@ export default function Header() {
   return (
     <div className="w-full">
       {/* HEADER DE LA PÁGINA */}
-      <header className="sticky top-4 z-40 px-3 pt-3 sm:px-4 lg:px-6">
+     <header className="sticky top-1 z-40 px-3 pt-1 sm:top-4 sm:pt-3 sm:px-4 lg:px-6">
         <div className="relative mx-auto flex max-w-7xl items-center justify-between rounded-[30px] border border-white/10 px-3 py-2.5 shadow-[0_0_0_1px_rgba(255,255,255,0.03),0_20px_70px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-2xl sm:px-4 lg:px-5">
           <div className="absolute inset-0 overflow-hidden rounded-[30px]">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(185,90,80,0.22),transparent_36%),linear-gradient(135deg,rgba(0,0,0,0.96),rgba(18,8,10,0.92)_48%,rgba(6,6,6,0.98))]" />
@@ -26,18 +26,17 @@ export default function Header() {
             <div className="absolute inset-x-4 bottom-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
           </div>
 
-<Link to="/" className="relative flex items-center gap-3">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/10 shadow-[0_0_18px_rgba(170,80,80,0.18)] backdrop-blur-sm sm:h-12 sm:w-12">
-              <ShoppingBag className="h-7 w-7 text-white sm:h-6 sm:w-6" />
+<Link to="/" className="relative flex items-center gap-3 max-w-[50%] overflow-hidden">
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/10 shadow-[0_0_18px_rgba(170,80,80,0.18)] backdrop-blur-sm sm:h-12 sm:w-12">
+              <ShoppingBag className="h-9 w-9 text-white sm:h-6 sm:w-6" />
             </div>
             <span
-              className="font-brand text-[1.9rem] font-extrabold leading-none tracking-[0.16em] text-white sm:text-[1.8rem]"
+              className="font-brand text-[2.4rem] font-extrabold leading-none tracking-[0.12em] text-white truncate sm:text-[1.8rem]"
               style={{ fontFamily: 'ModernTokyo, Manrope, sans-serif', fontWeight: 800 }}
             >
               {storeName}
             </span>
           </Link>
-
           <nav className="relative hidden items-center gap-2 md:flex xl:gap-3">
             {navItems.map((item) => (
               <Link
