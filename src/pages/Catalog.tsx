@@ -13,7 +13,7 @@ export default function Catalog() {
   const [search, setSearch] = useState('');
   const { data: categories } = useCollection<Category>('categories');
   const { data: products } = useCollection<Product>('products');
-  const { addToCart } = useCart();
+  const { addToCart, flyToCart } = useCart();
 
   const filteredProducts = products.filter(product => {
     const matchesCategory = !categoryId || product.categoryId === categoryId;
@@ -97,7 +97,10 @@ export default function Catalog() {
                 key={product.id}
                 product={product}
                 categories={categories}
-                onAddToCart={() => addToCart(product)}
+                onAddToCart={(el) => {
+                  flyToCart(product.imageUrl, el);
+                  addToCart(product);
+                }}
               />
             ))}
           </div>
@@ -114,7 +117,7 @@ function ProductCard({
 }: { 
   product: Product;
   categories: Category[];
-  onAddToCart: () => void;
+  onAddToCart: (originEl: HTMLElement | null) => void;
 }) {
   const category = categories.find(c => c.id === product.categoryId);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -209,7 +212,7 @@ function ProductCard({
             <button
               onClick={(e) => {
                 e.preventDefault();
-                onAddToCart();
+                onAddToCart(e.currentTarget);
               }}
               className="flex items-center gap-2 bg-rose-600 hover:bg-rose-500 text-white px-4 py-2 rounded-lg font-semibold transition-colors shadow-[0_0_18px_rgba(190,40,40,0.25)]"
             >
@@ -233,7 +236,7 @@ function ProductDetail({
   categoryId: string | null;
 }) {
   const category = categories.find(c => c.id === product.categoryId);
-  const { addToCart, items, updateQuantity } = useCart();
+  const { addToCart, items, updateQuantity, flyToCart } = useCart();
   const hasSizes = !!product.sizes && product.sizes.length > 0;
   const getStock = (size?: string) => {
     if (!size) return Infinity;
@@ -250,6 +253,8 @@ function ProductDetail({
   const sizeStock = getStock(selectedSize);
   const outOfStock = hasSizes && selectedSize ? sizeStock <= 0 : false;
   const reachedMax = hasSizes && selectedSize ? quantity >= sizeStock : false;
+  // El talle no está elegido solo si el producto tiene talles y ninguno quedó seleccionado
+  const sizeMissing = hasSizes && !selectedSize;
 
   return (
     <div className="min-h-screen bg-slate-950">
@@ -332,18 +337,26 @@ function ProductDetail({
                         : `${sizeStock} disponibles`}
                     </p>
                   )}
+                  {sizeMissing && (
+                    <p className="text-xs mt-2 text-rose-300">
+                      Elegi un talle para poder agregar al carrito
+                    </p>
+                  )}
                 </div>
               )}
 
               <div className="mt-auto">
                 {quantity === 0 ? (
                   <button
-                    onClick={() => addToCart(product, selectedSize)}
-                    disabled={(hasSizes && !selectedSize) || outOfStock}
+                    onClick={(e) => {
+                      flyToCart(product.imageUrl, e.currentTarget);
+                      addToCart(product, selectedSize);
+                    }}
+                    disabled={sizeMissing || outOfStock}
                     className="w-full flex items-center justify-center gap-3 bg-rose-600 hover:bg-rose-500 text-white py-4 rounded-xl font-semibold transition-colors text-lg shadow-[0_0_20px_rgba(190,40,40,0.3)] disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <ShoppingCart className="w-5 h-5" />
-                    {outOfStock ? 'Sin stock' : 'Agregar al carrito'}
+                    {outOfStock ? 'Sin stock' : sizeMissing ? 'Elegi un talle' : 'Agregar al carrito'}
                   </button>
                 ) : (
                   <div className="flex items-center justify-center gap-4 bg-black/30 border border-white/10 rounded-xl p-2">
@@ -357,7 +370,11 @@ function ProductDetail({
                       {quantity}
                     </span>
                     <button
-                      onClick={() => !reachedMax && updateQuantity(product.id, quantity + 1, selectedSize)}
+                      onClick={(e) => {
+                        if (reachedMax) return;
+                        flyToCart(product.imageUrl, e.currentTarget);
+                        updateQuantity(product.id, quantity + 1, selectedSize);
+                      }}
                       disabled={reachedMax}
                       className="w-12 h-12 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-lg text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                     >
@@ -373,4 +390,3 @@ function ProductDetail({
     </div>
   );
 }
-
