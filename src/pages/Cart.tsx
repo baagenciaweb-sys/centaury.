@@ -11,7 +11,7 @@ export default function Cart() {
 
   if (items.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12">
+      <div className="min-h-screen bg-white flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-3xl rounded-[32px] border border-slate-200 bg-white/90 px-8 py-16 text-center shadow-[0_20px_60px_rgba(0,0,0,0.08)] backdrop-blur-sm sm:px-12 lg:px-16 lg:py-24">
           <ShoppingBag className="w-32 h-32 mx-auto text-gray-300 mb-8" />
           <h2 className="text-5xl sm:text-6xl font-bold text-gray-900 mb-4">Tu carrito esta vacio</h2>
@@ -58,7 +58,7 @@ export default function Cart() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
@@ -176,7 +176,7 @@ function CartItemCard({
   const reachedMax = typeof stockForSize === 'number' && quantity >= stockForSize;
 
   return (
-    <div className="bg-white rounded-xl shadow-sm p-4 flex gap-4">
+    <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-4 flex gap-4">
       <div className="w-24 h-24 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
         {product.imageUrl ? (
           <img
@@ -196,34 +196,34 @@ function CartItemCard({
           <div>
             <h3 className="font-semibold text-gray-900 line-clamp-1">{product.name}</h3>
             {selectedSize && (
-              <span className="inline-block mt-1 bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-xs font-medium">
+              <span className="inline-block mt-1 bg-slate-800 text-white px-2 py-0.5 rounded text-xs font-medium">
                 Talle {selectedSize}
               </span>
             )}
           </div>
           <button
             onClick={() => onRemove(product.id, selectedSize)}
-            className="text-gray-400 hover:text-red-500 transition-colors p-1"
+            className="flex items-center justify-center w-8 h-8 rounded-lg bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-colors"
           >
-            <Trash2 className="w-5 h-5" />
+            <Trash2 className="w-4 h-4" />
           </button>
         </div>
         
         <p className="text-sm text-gray-500 line-clamp-1 mb-3">{product.description}</p>
         
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3 bg-gray-100 rounded-lg p-1">
+          <div className="flex items-center gap-2 bg-gray-100 rounded-lg p-1">
             <button
               onClick={() => onUpdateQuantity(product.id, quantity - 1, selectedSize)}
-              className="w-8 h-8 flex items-center justify-center hover:bg-white rounded transition-colors"
+              className="w-9 h-9 flex items-center justify-center bg-slate-800 hover:bg-slate-900 text-white rounded-md shadow-sm transition-colors"
             >
               <Minus className="w-4 h-4" />
             </button>
-            <span className="font-semibold w-6 text-center">{quantity}</span>
+            <span className="font-bold text-gray-900 w-7 text-center">{quantity}</span>
             <button
               onClick={() => !reachedMax && onUpdateQuantity(product.id, quantity + 1, selectedSize)}
               disabled={reachedMax}
-              className="w-8 h-8 flex items-center justify-center hover:bg-white rounded transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              className="w-9 h-9 flex items-center justify-center bg-slate-800 hover:bg-slate-900 text-white rounded-md shadow-sm transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
             >
               <Plus className="w-4 h-4" />
             </button>
