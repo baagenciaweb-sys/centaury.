@@ -4,7 +4,7 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useCollection } from '../hooks/useFirestore';
 import { useCart } from '../contexts/CartContext';
 import { Category, Product } from '../types';
-import { Package, ShoppingCart, Search, Filter, Plus, Minus } from 'lucide-react';
+import { Package, ShoppingCart, Search, Plus, Minus } from 'lucide-react';
 
 export default function Catalog() {
   const [searchParams] = useSearchParams();
@@ -31,38 +31,38 @@ export default function Catalog() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-950">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl font-bold text-white mb-2">
             {selectedCategory ? selectedCategory.name : 'Catalogo'}
           </h1>
           {selectedCategory?.description && (
-            <p className="text-gray-600">{selectedCategory.description}</p>
+            <p className="text-slate-400">{selectedCategory.description}</p>
           )}
         </div>
 
         {/* Search and Filters */}
         <div className="mb-8 space-y-4">
           <div className="relative max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
             <input
               type="text"
               placeholder="Buscar productos..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-800 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-3 bg-black/30 border border-white/10 rounded-lg text-white placeholder:text-slate-500 focus:ring-2 focus:ring-rose-500/50 focus:border-rose-400/50 focus:outline-none"
             />
           </div>
           
           <div className="flex flex-wrap gap-2">
             <Link
               to="/catalog"
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+              className={`px-4 py-2 rounded-full font-medium text-sm border transition-all duration-300 ${
                 !categoryId
-                  ? 'bg-slate-800 text-white'
-                  : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'
+                  ? 'bg-rose-600 border-rose-600 text-white shadow-[0_0_20px_rgba(190,40,40,0.3)]'
+                  : 'bg-black/30 text-slate-200 border-white/10 hover:border-rose-400/50 hover:text-white'
               }`}
             >
               Todos
@@ -71,10 +71,10 @@ export default function Catalog() {
               <Link
                 key={category.id}
                 to={`/catalog?category=${category.id}`}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                className={`px-4 py-2 rounded-full font-medium text-sm border transition-all duration-300 ${
                   categoryId === category.id
-                    ? 'bg-slate-800 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'
+                    ? 'bg-rose-600 border-rose-600 text-white shadow-[0_0_20px_rgba(190,40,40,0.3)]'
+                    : 'bg-black/30 text-slate-200 border-white/10 hover:border-rose-400/50 hover:text-white'
                 }`}
               >
                 {category.name}
@@ -85,9 +85,10 @@ export default function Catalog() {
 
         {/* Products Grid */}
         {filteredProducts.length === 0 ? (
-          <div className="text-center py-16 bg-white rounded-xl shadow-sm">
-            <Package className="w-20 h-20 mx-auto text-gray-300 mb-4" />
-            <p className="text-gray-500 text-lg">No se encontraron productos</p>
+          <div className="admin-neon-container text-center py-16">
+            <div className="admin-neon-glow-top" />
+            <Package className="relative w-20 h-20 mx-auto text-slate-600 mb-4" />
+            <p className="relative text-slate-400 text-lg">No se encontraron productos</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" style={{ perspective: 1200 }}>
@@ -154,10 +155,11 @@ function ProductCard({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       style={{ rotateX, rotateY, scale, transformStyle: 'preserve-3d' }}
-      className="bg-white rounded-xl shadow-sm hover:shadow-2xl transition-shadow duration-300 overflow-hidden group"
+      className="admin-neon-container group overflow-hidden hover:-translate-y-0.5 hover:border-rose-400/40 hover:shadow-[0_0_30px_rgba(190,40,40,0.18)] transition-all duration-300"
     >
+      <div className="admin-neon-glow-top" />
       <Link to={`/catalog?product=${product.id}`}>
-        <div className="aspect-square bg-gray-100 overflow-hidden relative">
+        <div className="aspect-square bg-black/30 overflow-hidden relative">
           {product.imageUrl ? (
             <img
               src={product.imageUrl}
@@ -166,11 +168,11 @@ function ProductCard({
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
-              <Package className="w-16 h-16 text-gray-300" />
+              <Package className="w-16 h-16 text-slate-600" />
             </div>
           )}
           {category && (
-            <span className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-xs font-medium text-slate-700 px-2 py-1 rounded-full">
+            <span className="absolute top-3 left-3 bg-black/60 backdrop-blur-sm text-xs font-medium text-rose-200 border border-white/10 px-2 py-1 rounded-full">
               {category.name}
             </span>
           )}
@@ -182,23 +184,23 @@ function ProductCard({
         </div>
       </Link>
       
-      <div className="p-4" style={{ transform: 'translateZ(20px)' }}>
+      <div className="relative p-4" style={{ transform: 'translateZ(20px)' }}>
         <Link to={`/catalog?product=${product.id}`}>
-          <h3 className="font-semibold text-gray-900 mb-1 line-clamp-1 hover:text-slate-700">
+          <h3 className="font-semibold text-white mb-1 line-clamp-1 hover:text-rose-300 transition-colors">
             {product.name}
           </h3>
-          <p className="text-sm text-gray-500 line-clamp-2 mb-3">
+          <p className="text-sm text-slate-400 line-clamp-2 mb-3">
             {product.description}
           </p>
         </Link>
         <div className="flex items-center justify-between">
-          <span className="text-xl font-bold text-slate-900">
+          <span className="text-xl font-bold text-white">
             ${product.price.toFixed(2)}
           </span>
           {product.sizes && product.sizes.length > 0 ? (
             <Link
               to={`/catalog?product=${product.id}`}
-              className="flex items-center gap-2 bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-lg transition-colors"
+              className="flex items-center gap-2 bg-rose-600 hover:bg-rose-500 text-white px-4 py-2 rounded-lg font-semibold transition-colors shadow-[0_0_18px_rgba(190,40,40,0.25)]"
             >
               <ShoppingCart className="w-4 h-4" />
               <span className="text-sm font-medium">{isSoldOut ? 'Ver producto' : 'Elegir talle'}</span>
@@ -209,7 +211,7 @@ function ProductCard({
                 e.preventDefault();
                 onAddToCart();
               }}
-              className="flex items-center gap-2 bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-lg transition-colors"
+              className="flex items-center gap-2 bg-rose-600 hover:bg-rose-500 text-white px-4 py-2 rounded-lg font-semibold transition-colors shadow-[0_0_18px_rgba(190,40,40,0.25)]"
             >
               <ShoppingCart className="w-4 h-4" />
               <span className="text-sm font-medium">Agregar</span>
@@ -250,20 +252,21 @@ function ProductDetail({
   const reachedMax = hasSizes && selectedSize ? quantity >= sizeStock : false;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-950">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Link
           to={categoryId ? `/catalog?category=${categoryId}` : '/catalog'}
-          className="inline-flex items-center text-slate-700 hover:text-slate-900 font-medium mb-6"
+          className="inline-flex items-center text-slate-300 hover:text-white font-medium mb-6 transition-colors"
         >
           <Minus className="w-4 h-4 mr-1 rotate-90" />
           Volver al catalogo
         </Link>
 
-        <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-          <div className="grid md:grid-cols-2 gap-8 p-6 lg:p-8">
+        <div className="admin-neon-container overflow-hidden">
+          <div className="admin-neon-glow-top" />
+          <div className="relative grid md:grid-cols-2 gap-8 p-6 lg:p-8">
             {/* Product Image */}
-            <div className="aspect-square bg-gray-100 rounded-xl overflow-hidden">
+            <div className="aspect-square bg-black/30 rounded-xl overflow-hidden">
               {product.imageUrl ? (
                 <img
                   src={product.imageUrl}
@@ -272,7 +275,7 @@ function ProductDetail({
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
-                  <Package className="w-24 h-24 text-gray-300" />
+                  <Package className="w-24 h-24 text-slate-600" />
                 </div>
               )}
             </div>
@@ -280,23 +283,23 @@ function ProductDetail({
             {/* Product Info */}
             <div className="flex flex-col">
               {category && (
-                <span className="text-sm font-medium text-slate-600 bg-slate-100 px-3 py-1 rounded-full w-fit mb-4">
+                <span className="text-sm font-medium text-rose-200 bg-black/40 border border-rose-500/20 px-3 py-1 rounded-full w-fit mb-4">
                   {category.name}
                 </span>
               )}
-              <h1 className="text-3xl font-bold text-gray-900 mb-4">
+              <h1 className="text-3xl font-bold text-white mb-4">
                 {product.name}
               </h1>
-              <p className="text-gray-600 mb-6 leading-relaxed">
+              <p className="text-slate-400 mb-6 leading-relaxed">
                 {product.description}
               </p>
-              <div className="text-4xl font-bold text-slate-900 mb-8">
+              <div className="text-4xl font-bold text-white mb-8">
                 ${product.price.toFixed(2)}
               </div>
 
               {hasSizes && (
                 <div className="mb-8">
-                  <label className="block text-sm font-medium text-gray-700 mb-3">
+                  <label className="block text-sm font-medium text-slate-300 mb-3">
                     Talle
                   </label>
                   <div className="flex flex-wrap gap-2">
@@ -311,10 +314,10 @@ function ProductDetail({
                           disabled={disabled}
                           className={`px-4 py-2 rounded-lg font-medium text-sm border transition-colors ${
                             disabled
-                              ? 'bg-gray-100 text-gray-400 border-gray-200 line-through cursor-not-allowed'
+                              ? 'bg-black/20 text-slate-600 border-white/5 line-through cursor-not-allowed'
                               : selectedSize === size
-                                ? 'bg-slate-800 text-white border-slate-800'
-                                : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                                ? 'bg-rose-600 text-white border-rose-600 shadow-[0_0_18px_rgba(190,40,40,0.25)]'
+                                : 'bg-black/30 text-slate-200 border-white/10 hover:border-rose-400/50'
                           }`}
                         >
                           {size}
@@ -323,7 +326,7 @@ function ProductDetail({
                     })}
                   </div>
                   {selectedSize && (
-                    <p className={`text-xs mt-2 ${outOfStock ? 'text-red-500' : 'text-gray-400'}`}>
+                    <p className={`text-xs mt-2 ${outOfStock ? 'text-red-400' : 'text-slate-500'}`}>
                       {outOfStock
                         ? 'Talle agotado'
                         : `${sizeStock} disponibles`}
@@ -337,16 +340,16 @@ function ProductDetail({
                   <button
                     onClick={() => addToCart(product, selectedSize)}
                     disabled={(hasSizes && !selectedSize) || outOfStock}
-                    className="w-full flex items-center justify-center gap-3 bg-slate-800 hover:bg-slate-900 text-white py-4 rounded-xl font-semibold transition-colors text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full flex items-center justify-center gap-3 bg-rose-600 hover:bg-rose-500 text-white py-4 rounded-xl font-semibold transition-colors text-lg shadow-[0_0_20px_rgba(190,40,40,0.3)] disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <ShoppingCart className="w-5 h-5" />
                     {outOfStock ? 'Sin stock' : 'Agregar al carrito'}
                   </button>
                 ) : (
-                  <div className="flex items-center justify-center gap-4 bg-slate-800 rounded-xl p-2">
+                  <div className="flex items-center justify-center gap-4 bg-black/30 border border-white/10 rounded-xl p-2">
                     <button
                       onClick={() => updateQuantity(product.id, quantity - 1, selectedSize)}
-                      className="w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-lg text-white transition-colors"
+                      className="w-12 h-12 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-lg text-white transition-colors"
                     >
                       <Minus className="w-5 h-5" />
                     </button>
@@ -356,7 +359,7 @@ function ProductDetail({
                     <button
                       onClick={() => !reachedMax && updateQuantity(product.id, quantity + 1, selectedSize)}
                       disabled={reachedMax}
-                      className="w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-lg text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                      className="w-12 h-12 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-lg text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       <Plus className="w-5 h-5" />
                     </button>
@@ -370,5 +373,4 @@ function ProductDetail({
     </div>
   );
 }
-
 
