@@ -1,4 +1,6 @@
-import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { CartItem, Product } from '../types';
 
 interface CartContextType {
@@ -9,6 +11,8 @@ interface CartContextType {
   clearCart: () => void;
   total: number;
   itemCount: number;
+  cartIconRef: React.RefObject<HTMLElement>;
+  flyToCart: (imageUrl: string | undefined, originEl: HTMLElement | null) => void;
 }
 
 const CartContext = createContext<CartContextType | null>(null);
@@ -24,6 +28,12 @@ export function useCart() {
 // Un mismo producto con distinto talle debe tratarse como items distintos
 function isSameCartLine(item: CartItem, productId: string, selectedSize?: string) {
   return item.product.id === productId && (item.selectedSize || undefined) === (selectedSize || undefined);
+}
+
+interface FlyingItem {
+  id: number;
+  imageUrl?: string;
+  startRect: DOMRect;
 }
 
 export function CartProvider({ children }: { children: ReactNode }) {
@@ -78,6 +88,22 @@ export function CartProvider({ children }: { children: ReactNode }) {
   );
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
+  // --- Animación "volar al carrito" ---
+  const cartIconRef = useRef<HTMLElement>(null);
+  const [flyingItems, setFlyingItems] = useState<FlyingItem[]>([]);
+  const flyIdRef = useRef(0);
+
+  const flyToCart = useCallback((imageUrl: string | undefined, originEl: HTMLElement | null) => {
+    if (!originEl) return;
+    const startRect = originEl.getBoundingClientRect();
+    const id = flyIdRef.current++;
+    setFlyingItems(prev => [...prev, { id, imageUrl, startRect }]);
+  }, []);
+
+  const removeFlyingItem = (id: number) => {
+    setFlyingItems(prev => prev.filter(f => f.id !== id));
+  };
+
   return (
     <CartContext.Provider value={{
       items,
@@ -86,9 +112,58 @@ export function CartProvider({ children }: { children: ReactNode }) {
       updateQuantity,
       clearCart,
       total,
-      itemCount
+      itemCount,
+      cartIconRef,
+      flyToCart,
     }}>
       {children}
+
+      {typeof document !== 'undefined' && createPortal(
+        <AnimatePresence>
+          {flyingItems.map(item => {
+            const endRect = cartIconRef.current?.getBoundingClientRect();
+            const endTop = endRect ? endRect.top + endRect.height / 2 - 14 : item.startRect.top;
+            const endLeft = endRect ? endRect.left + endRect.width / 2 - 14 : item.startRect.left;
+            return (
+              <motion.div
+                key={item.id}
+                style={{
+                  position: 'fixed',
+                  zIndex: 9999,
+                  pointerEvents: 'none',
+                  borderRadius: '9999px',
+                  overflow: 'hidden',
+                  boxShadow: '0 0 20px rgba(190,40,40,0.5)',
+                }}
+                initial={{
+                  top: item.startRect.top,
+                  left: item.startRect.left,
+                  width: item.startRect.width,
+                  height: item.startRect.height,
+                  opacity: 1,
+                }}
+                animate={{
+                  top: endTop,
+                  left: endLeft,
+                  width: 28,
+                  height: 28,
+                  opacity: 0.5,
+                }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.75, ease: [0.2, 0.65, 0.3, 1] }}
+                onAnimationComplete={() => removeFlyingItem(item.id)}
+              >
+                {item.imageUrl ? (
+                  <img src={item.imageUrl} className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full bg-rose-600" />
+                )}
+              </motion.div>
+            );
+          })}
+        </AnimatePresence>,
+        document.body
+      )}
     </CartContext.Provider>
   );
 }
