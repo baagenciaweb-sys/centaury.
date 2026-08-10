@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { ShoppingBag, ShoppingCart, Menu, X, User } from 'lucide-react';
 
 export default function Header() {
-  const { itemCount } = useCart();
+  const { itemCount, cartIconRef } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const storeName = import.meta.env.VITE_STORE_NAME || 'Centaury Shop';
 
@@ -18,7 +18,7 @@ export default function Header() {
   return (
     <div className="w-full">
       {/* HEADER DE LA PÁGINA */}
-     <header className="sticky top-1 z-40 px-3 pt-1 sm:top-4 sm:pt-3 sm:px-4 lg:px-6">
+      <header className="sticky top-4 z-40 px-3 pt-3 sm:px-4 lg:px-6">
         <div className="relative mx-auto flex max-w-7xl items-center justify-between rounded-[30px] border border-white/10 px-3 py-2.5 shadow-[0_0_0_1px_rgba(255,255,255,0.03),0_20px_70px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-2xl sm:px-4 lg:px-5">
           <div className="absolute inset-0 overflow-hidden rounded-[30px]">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(185,90,80,0.22),transparent_36%),linear-gradient(135deg,rgba(0,0,0,0.96),rgba(18,8,10,0.92)_48%,rgba(6,6,6,0.98))]" />
@@ -26,7 +26,7 @@ export default function Header() {
             <div className="absolute inset-x-4 bottom-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
           </div>
 
-<Link to="/" className="relative flex items-center gap-3">
+          <Link to="/" className="relative flex items-center gap-3">
             <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/10 shadow-[0_0_18px_rgba(170,80,80,0.18)] backdrop-blur-sm sm:h-12 sm:w-12">
               <ShoppingBag className="h-5 w-5 text-white sm:h-6 sm:w-6" />
             </div>
@@ -37,6 +37,7 @@ export default function Header() {
               {storeName}
             </span>
           </Link>
+
           <nav className="relative hidden items-center gap-2 md:flex xl:gap-3">
             {navItems.map((item) => (
               <Link
@@ -53,6 +54,7 @@ export default function Header() {
           <div className="relative flex items-center gap-2 sm:gap-3">
             <Link
               to="/cart"
+              ref={cartIconRef as React.RefObject<HTMLAnchorElement>}
               className="group relative rounded-full border border-white/10 bg-black/30 p-2.5 text-slate-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-all duration-500 hover:-translate-y-0.5 hover:border-rose-400/50 hover:text-white hover:shadow-[0_0_20px_rgba(170,40,40,0.16),inset_0_0_18px_rgba(180,60,60,0.08)] active:scale-[0.97]"
             >
               <span className="absolute inset-0 overflow-hidden rounded-full">
@@ -60,7 +62,10 @@ export default function Header() {
               </span>
               <ShoppingCart className="relative z-10 h-5 w-5 sm:h-6 sm:w-6" />
               {itemCount > 0 && (
-                <span className="absolute -right-1 -top-1 z-20 flex h-5 w-5 items-center justify-center rounded-full bg-rose-500/90 text-[10px] font-bold text-white">
+                <span
+                  key={itemCount}
+                  className="absolute -right-1 -top-1 z-20 flex h-5 w-5 items-center justify-center rounded-full bg-rose-500/90 text-[10px] font-bold text-white animate-[cartBump_0.4s_ease-out]"
+                >
                   {itemCount}
                 </span>
               )}
