@@ -26,12 +26,12 @@ export default function Header() {
             <div className="absolute inset-x-4 bottom-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
           </div>
 
-<Link to="/" className="relative flex items-center gap-3 max-w-[50%] overflow-hidden">
-            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/10 shadow-[0_0_18px_rgba(170,80,80,0.18)] backdrop-blur-sm sm:h-12 sm:w-12">
-              <ShoppingBag className="h-9 w-9 text-white sm:h-6 sm:w-6" />
+<Link to="/" className="relative flex items-center gap-3">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/10 shadow-[0_0_18px_rgba(170,80,80,0.18)] backdrop-blur-sm sm:h-12 sm:w-12">
+              <ShoppingBag className="h-5 w-5 text-white sm:h-6 sm:w-6" />
             </div>
             <span
-              className="font-brand text-[2.4rem] font-extrabold leading-none tracking-[0.12em] text-white truncate sm:text-[1.8rem]"
+              className="font-brand text-[1.45rem] font-extrabold leading-none tracking-[0.16em] text-white sm:text-[1.8rem]"
               style={{ fontFamily: 'ModernTokyo, Manrope, sans-serif', fontWeight: 800 }}
             >
               {storeName}
