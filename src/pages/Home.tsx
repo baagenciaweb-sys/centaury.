@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 
 import logoCentaury from '../assets/images/centaury.jpeg';
-import heroBanner from '../assets/images/FONDOBANNER.png';
+import heroBanner from '../assets/images/FONDOBANNER.jpg';
 
 export default function Home() {
   const { data: categories } = useCollection('categories');
