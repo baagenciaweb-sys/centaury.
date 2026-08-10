@@ -1,10 +1,10 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useCollection } from '../hooks/useFirestore';
 import { useCart } from '../contexts/CartContext';
 import { Category, Product } from '../types';
-import { Package, ShoppingCart, Search, Plus, Minus } from 'lucide-react';
+import { Package, ShoppingCart, Search, Plus, Minus, Check } from 'lucide-react';
 
 export default function Catalog() {
   const [searchParams] = useSearchParams();
@@ -236,7 +236,9 @@ function ProductDetail({
   categoryId: string | null;
 }) {
   const category = categories.find(c => c.id === product.categoryId);
-  const { addToCart, items, updateQuantity, flyToCart } = useCart();
+  const { addToCart, items, flyToCart } = useCart();
+  const imgRef = useRef<HTMLDivElement>(null);
+
   const hasSizes = !!product.sizes && product.sizes.length > 0;
   const getStock = (size?: string) => {
     if (!size) return Infinity;
@@ -246,15 +248,36 @@ function ProductDetail({
     ? product.sizes!.find(s => getStock(s) > 0) || product.sizes![0]
     : undefined;
   const [selectedSize, setSelectedSize] = useState<string | undefined>(firstAvailableSize);
+
+  // Cantidad elegida ANTES de agregar al carrito (no toca el carrito todavia)
+  const [localQty, setLocalQty] = useState(1);
+  useEffect(() => {
+    setLocalQty(1);
+  }, [selectedSize]);
+
+  const [justAdded, setJustAdded] = useState(false);
+
   const cartItem = items.find(
     item => item.product.id === product.id && (item.selectedSize || undefined) === (selectedSize || undefined)
   );
-  const quantity = cartItem?.quantity || 0;
+  const alreadyInCart = cartItem?.quantity || 0;
+
   const sizeStock = getStock(selectedSize);
   const outOfStock = hasSizes && selectedSize ? sizeStock <= 0 : false;
-  const reachedMax = hasSizes && selectedSize ? quantity >= sizeStock : false;
-  // El talle no está elegido solo si el producto tiene talles y ninguno quedó seleccionado
   const sizeMissing = hasSizes && !selectedSize;
+
+  const maxQty = hasSizes ? Math.max(0, sizeStock) : 99;
+  const canDecrease = localQty > 1;
+  const canIncrease = localQty < maxQty;
+
+  const handleAdd = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (sizeMissing || outOfStock) return;
+    flyToCart(product.imageUrl, imgRef.current || e.currentTarget);
+    addToCart(product, selectedSize, localQty);
+    setJustAdded(true);
+    setLocalQty(1);
+    window.setTimeout(() => setJustAdded(false), 2200);
+  };
 
   return (
     <div className="min-h-screen bg-slate-950">
@@ -271,7 +294,7 @@ function ProductDetail({
           <div className="admin-neon-glow-top" />
           <div className="relative grid md:grid-cols-2 gap-8 p-6 lg:p-8">
             {/* Product Image */}
-            <div className="aspect-square bg-black/30 rounded-xl overflow-hidden">
+            <div ref={imgRef} className="aspect-square bg-black/30 rounded-xl overflow-hidden">
               {product.imageUrl ? (
                 <img
                   src={product.imageUrl}
@@ -302,10 +325,11 @@ function ProductDetail({
                 ${product.price.toFixed(2)}
               </div>
 
+              {/* Paso 1: Talle */}
               {hasSizes && (
                 <div className="mb-8">
                   <label className="block text-sm font-medium text-slate-300 mb-3">
-                    Talle
+                    1. Elegi el talle
                   </label>
                   <div className="flex flex-wrap gap-2">
                     {product.sizes!.map(size => {
@@ -332,55 +356,72 @@ function ProductDetail({
                   </div>
                   {selectedSize && (
                     <p className={`text-xs mt-2 ${outOfStock ? 'text-red-400' : 'text-slate-500'}`}>
-                      {outOfStock
-                        ? 'Talle agotado'
-                        : `${sizeStock} disponibles`}
-                    </p>
-                  )}
-                  {sizeMissing && (
-                    <p className="text-xs mt-2 text-rose-300">
-                      Elegi un talle para poder agregar al carrito
+                      {outOfStock ? 'Talle agotado' : `${sizeStock} disponibles`}
                     </p>
                   )}
                 </div>
               )}
 
-              <div className="mt-auto">
-                {quantity === 0 ? (
+              {/* Paso 2: Cantidad (recien se habilita con talle elegido) */}
+              <div className={`mb-8 transition-opacity ${sizeMissing ? 'opacity-40 pointer-events-none' : ''}`}>
+                <label className="block text-sm font-medium text-slate-300 mb-3">
+                  {hasSizes ? '2. Elegi la cantidad' : 'Cantidad'}
+                </label>
+                <div className="flex items-center gap-4 bg-black/30 border border-white/10 rounded-xl p-2 w-fit">
                   <button
-                    onClick={(e) => {
-                      flyToCart(product.imageUrl, e.currentTarget);
-                      addToCart(product, selectedSize);
-                    }}
-                    disabled={sizeMissing || outOfStock}
-                    className="w-full flex items-center justify-center gap-3 bg-rose-600 hover:bg-rose-500 text-white py-4 rounded-xl font-semibold transition-colors text-lg shadow-[0_0_20px_rgba(190,40,40,0.3)] disabled:opacity-50 disabled:cursor-not-allowed"
+                    type="button"
+                    onClick={() => setLocalQty(q => Math.max(1, q - 1))}
+                    disabled={!canDecrease}
+                    className="w-11 h-11 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-lg text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                   >
-                    <ShoppingCart className="w-5 h-5" />
-                    {outOfStock ? 'Sin stock' : sizeMissing ? 'Elegi un talle' : 'Agregar al carrito'}
+                    <Minus className="w-5 h-5" />
                   </button>
-                ) : (
-                  <div className="flex items-center justify-center gap-4 bg-black/30 border border-white/10 rounded-xl p-2">
-                    <button
-                      onClick={() => updateQuantity(product.id, quantity - 1, selectedSize)}
-                      className="w-12 h-12 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-lg text-white transition-colors"
-                    >
-                      <Minus className="w-5 h-5" />
-                    </button>
-                    <span className="text-2xl font-bold text-white min-w-[3rem] text-center">
-                      {quantity}
-                    </span>
-                    <button
-                      onClick={(e) => {
-                        if (reachedMax) return;
-                        flyToCart(product.imageUrl, e.currentTarget);
-                        updateQuantity(product.id, quantity + 1, selectedSize);
-                      }}
-                      disabled={reachedMax}
-                      className="w-12 h-12 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-lg text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-                    >
-                      <Plus className="w-5 h-5" />
-                    </button>
-                  </div>
+                  <span className="text-xl font-bold text-white min-w-[2.5rem] text-center">
+                    {localQty}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setLocalQty(q => (canIncrease ? q + 1 : q))}
+                    disabled={!canIncrease || outOfStock}
+                    className="w-11 h-11 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-lg text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                  >
+                    <Plus className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Paso 3: Agregar al carrito */}
+              <div className="mt-auto">
+                <button
+                  onClick={handleAdd}
+                  disabled={sizeMissing || outOfStock}
+                  className="w-full flex items-center justify-center gap-3 bg-rose-600 hover:bg-rose-500 text-white py-4 rounded-xl font-semibold transition-colors text-lg shadow-[0_0_20px_rgba(190,40,40,0.3)] disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {justAdded ? (
+                    <>
+                      <Check className="w-5 h-5" />
+                      Agregado al carrito
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingCart className="w-5 h-5" />
+                      {outOfStock
+                        ? 'Sin stock'
+                        : sizeMissing
+                          ? 'Elegi un talle'
+                          : `Agregar al carrito (${localQty})`}
+                    </>
+                  )}
+                </button>
+
+                {alreadyInCart > 0 && (
+                  <p className="text-center text-sm text-slate-400 mt-3">
+                    Ya tenes {alreadyInCart} en el carrito
+                    {selectedSize ? ` (talle ${selectedSize})` : ''}.{' '}
+                    <Link to="/cart" className="text-rose-300 hover:text-rose-200 underline">
+                      Ver carrito
+                    </Link>
+                  </p>
                 )}
               </div>
             </div>
