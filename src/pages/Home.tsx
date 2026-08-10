@@ -48,10 +48,10 @@ export default function Home() {
 
           <div className="mb-3 flex items-center justify-start -mt-4">
 
-            <img
+          <img
               src={logoCentaury}
               alt={storeName}
-              className="h-16 w-auto sm:h-32 lg:h-64 rounded-3xl object-contain p-2 sm:p-4 shadow-2xl ring-1 ring-white/20"
+              className="h-auto w-1/2 max-w-[280px] sm:h-32 sm:w-auto lg:h-64 rounded-3xl object-contain p-2 sm:p-4 shadow-2xl ring-1 ring-white/20"
               style={{
                 filter:
                   'drop-shadow(0 0 20px rgba(0,0,0,0.45)) brightness(0.95) contrast(1.05)',
